@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Promotion API</title>
+    <style>
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #3B82F6;
+            padding-bottom: 10px;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: linear-gradient(to right, #9333EA, #EC4899);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        .error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+        .info {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            color: #1e40af;
+        }
+        .steps {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            border: 1px solid #f59e0b;
+        }
+        .steps ol {
+            margin: 10px 0 0 0;
+            padding-right: 20px;
+        }
+        .steps li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Promotion API</h1>
+        
+        <div class="steps">
+            <strong>⚠️ مراحل استفاده:</strong>
+            <ol>
+                <li>Login کن به پنل ادمین</li>
+                <li>Developer Tools رو باز کن (F12)</li>
+                <li>Console رو باز کن</li>
+                <li>Token رو از localStorage copy کن: <code>localStorage.getItem('token')</code></li>
+                <li>Token رو اینجا Paste کن</li>
+                <li>یک userId از یک Application تایید شده رو وارد کن</li>
+                <li>کلیک روی "Test Promote"</li>
+            </ol>
+        </div>
+
+        <div class="input-group">
+            <label for="token">Admin Token:</label>
+            <input type="text" id="token" placeholder="Bearer token از localStorage...">
+        </div>
+
+        <div class="input-group">
+            <label for="userId">User ID:</label>
+            <input type="text" id="userId" placeholder="6xxxxxxxxxxxxxxxxxxxxx">
+        </div>
+
+        <div class="input-group">
+            <button id="testBtn" onclick="testPromotion()">🚀 Test Promote</button>
+            <button onclick="testGetApplications()" style="background: #3B82F6; margin-top: 10px;">📋 Get Applications</button>
+            <button onclick="seedProfiles()" style="background: #10B981; margin-top: 10px;">🌱 Seed Member Profiles</button>
+        </div>
+
+        <div id="response"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3001';
+
+        async function testPromotion() {
+            const token = document.getElementById('token').value.trim();
+            const userId = document.getElementById('userId').value.trim();
+            const responseDiv = document.getElementById('response');
+            const btn = document.getElementById('testBtn');
+
+            if (!token || !userId) {
+                responseDiv.className = 'response error';
+                responseDiv.textContent = '❌ لطفا Token و User ID را وارد کنید!';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '⏳ در حال تست...';
+
+            try {
+                console.log('🚀 Starting promotion test...');
+                console.log('📍 URL:', `${API_URL}/api/membership/promote/${userId}`);
+                console.log('🔑 Token:', token.substring(0, 20) + '...');
+
+                const response = await fetch(`${API_URL}/api/membership/promote/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                console.log('📦 Response:', data);
+
+                if (response.ok) {
+                    responseDiv.className = 'response success';
+                    responseDiv.textContent = '✅ موفقیت!\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    responseDiv.className = 'response error';
+                    responseDiv.textContent = '❌ خطا!\n\n' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                console.error('💥 Error:', error);
+                responseDiv.className = 'response error';
+                responseDiv.textContent = '💥 Network Error:\n\n' + error.message;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 Test Promote';
+            }
+        }
+
+        async function testGetApplications() {
+            const token = document.getElementById('token').value.trim();
+            const responseDiv = document.getElementById('response');
+
+            if (!token) {
+                responseDiv.className = 'response error';
+                responseDiv.textContent = '❌ لطفا Token را وارد کنید!';
+                return;
+            }
+
+            try {
+                responseDiv.className = 'response info';
+                responseDiv.textContent = '⏳ در حال دریافت Applications...';
+
+                const response = await fetch(`${API_URL}/api/applications?status=approved&limit=5`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.data?.length > 0) {
+                    responseDiv.className = 'response info';
+                    let output = '📋 Applications (Approved):\n\n';
+                    
+                    data.data.forEach(app => {
+                        const userId = typeof app.userId === 'string' ? app.userId : (app.userId?._id || 'N/A');
+                        const isClubMember = app.userId?.role?.includes('club_member') || app.userId?.role?.includes('CLUB_MEMBER');
+                        
+                        output += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+                        output += `👤 ${app.firstName} ${app.lastName}\n`;
+                        output += `📧 ${app.email}\n`;
+                        output += `🆔 User ID: ${userId}\n`;
+                        output += `✅ Status: ${app.status}\n`;
+                        output += `🎓 Club Member: ${isClubMember ? 'بله' : 'خیر'}\n`;
+                        output += `👥 Roles: ${JSON.stringify(app.userId?.role || [])}\n\n`;
+                    });
+
+                    responseDiv.textContent = output;
+                } else {
+                    responseDiv.className = 'response error';
+                    responseDiv.textContent = '❌ خطا یا هیچ Application تایید شده‌ای وجود ندارد:\n\n' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                responseDiv.className = 'response error';
+                responseDiv.textContent = '💥 Error:\n\n' + error.message;
+            }
+        }
+
+        async function seedProfiles() {
+            const token = document.getElementById('token').value.trim();
+            const responseDiv = document.getElementById('response');
+
+            if (!token) {
+                responseDiv.className = 'response error';
+                responseDiv.textContent = '❌ لطفا Token را وارد کنید!';
+                return;
+            }
+
+            if (!confirm('آیا مطمئن هستید که می‌خواهید MemberProfile ها را seed کنید؟')) {
+                return;
+            }
+
+            try {
+                responseDiv.className = 'response info';
+                responseDiv.textContent = '🌱 در حال seed کردن...';
+
+                const response = await fetch(`${API_URL}/api/seed/member-profiles`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    responseDiv.className = 'response success';
+                    responseDiv.textContent = '✅ Seed موفق!\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    responseDiv.className = 'response error';
+                    responseDiv.textContent = '❌ خطا در Seed:\n\n' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                responseDiv.className = 'response error';
+                responseDiv.textContent = '💥 Error:\n\n' + error.message;
+            }
+        }
+
+        // Auto-fill token from localStorage if available
+        window.addEventListener('load', () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    document.getElementById('token').value = token;
+                    console.log('✅ Token auto-filled from localStorage');
+                }
+            } catch (e) {
+                console.log('ℹ️ Cannot access localStorage (different origin)');
+            }
+        });
+    </script>
+</body>
+</html>

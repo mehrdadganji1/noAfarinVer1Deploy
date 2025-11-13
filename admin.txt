@@ -17,3 +17,9 @@
 2. Email: dev@club.com
 3. Password: Dev1234!
 4. Login
+
+
+Login:
+
+Email: testmember@noafarin.com
+Password: Test1234!
