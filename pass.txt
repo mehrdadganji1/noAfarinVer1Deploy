@@ -1,0 +1,41 @@
+PS D:\programming\noafarineventir> node project1/services/user-service/scripts/createApplicant.js
+🔌 Connecting to MongoDB: mongodb://admin:admin123@localhost:27017/noafarin?authSource=admin
+✅ Connected to MongoDB
+⚠️  User already exists!
+
+📋 Existing User Details:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Email: applicant@test.com
+Password: 123456 (use this to login)
+Name: علی محمدی
+Role: [ 'applicant', 'club_member' ]
+Phone: 09123456780
+University: دانشگاه شریف
+Major: مهندسی نرم‌افزار
+Student ID: 400123457
+Email Verified: false
+
+
+
+✅ New Applicant created successfully!
+
+📋 Account Details:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Email: applicant1764529251974@test.com
+Password: 123456
+Name: رضا احمدی
+Role: applicant
+Phone: 09121234567
+University: دانشگاه شریف
+Major: مهندسی نرم‌افزار
+Student ID: 401234567
+Email Verified: Yes
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔗 Login URL: http://localhost:5173/login
+📱 Use the credentials above to login
+
+PS D:\programming\noafarineventir> node project1/services/user-service/scripts/listAllUsers.js
+🔌 Connecting to MongoDB: mongodb://admin:admin123@localhost:27017/noafarin?authSource=admin
+✅ Connected to MongoDB
+

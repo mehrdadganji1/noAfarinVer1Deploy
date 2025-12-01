@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "sequentialthinking"
+      ]
+    },
+    "memory-bank": {
+      "command": "uvx",
+      "args": [
+        "memory-bank-mcp"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "create_memory",
+        "update_memory",
+        "delete_memory",
+        "list_memories",
+        "search_memories",
+        "get_memory"
+      ]
+    }
+  }
+}
