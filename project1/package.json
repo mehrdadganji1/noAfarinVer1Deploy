@@ -1,0 +1,42 @@
+{
+  "name": "noafarin-platform",
+  "version": "1.0.0",
+  "description": "پلتفرم جامع مدیریت طرح ملی توان‌افزایی هسته‌های فناور",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:gateway\" \"npm run dev:user\" \"npm run dev:team\" \"npm run dev:event\" \"npm run dev:frontend\"",
+    "dev:gateway": "cd services/api-gateway && npm run dev",
+    "dev:user": "cd services/user-service && npm run dev",
+    "dev:team": "cd services/team-service && npm run dev",
+    "dev:event": "cd services/event-service && npm run dev",
+    "dev:evaluation": "cd services/evaluation-service && npm run dev",
+    "dev:training": "cd services/training-service && npm run dev",
+    "dev:funding": "cd services/funding-service && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm run install:services && npm run install:frontend",
+    "install:services": "cd services/api-gateway && npm install && cd ../user-service && npm install && cd ../team-service && npm install && cd ../event-service && npm install && cd ../evaluation-service && npm install && cd ../training-service && npm install && cd ../funding-service && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "build:all": "npm run build:services && npm run build:frontend",
+    "build:services": "cd services/api-gateway && npm run build && cd ../user-service && npm run build && cd ../team-service && npm run build && cd ../event-service && npm run build && cd ../evaluation-service && npm run build && cd ../training-service && npm run build && cd ../funding-service && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:build": "docker-compose build"
+  },
+  "keywords": [
+    "noafarin",
+    "innovation",
+    "startup",
+    "ecosystem",
+    "microservices"
+  ],
+  "author": "Noafarin Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "react-datepicker2": "^3.3.13"
+  }
+}

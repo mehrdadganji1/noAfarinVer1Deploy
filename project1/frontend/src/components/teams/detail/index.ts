@@ -1,0 +1,5 @@
+export { default as TeamHeader } from './TeamHeader'
+export { default as TeamInfoCard } from './TeamInfoCard'
+export { default as TeamTechStack } from './TeamTechStack'
+export { default as TeamMembersCard } from './TeamMembersCard'
+export { default as TeamStatsCard } from './TeamStatsCard'

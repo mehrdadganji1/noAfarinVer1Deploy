@@ -1,0 +1,7 @@
+export { default as WelcomeHeader } from './WelcomeHeader'
+export { default as MetricsGrid } from './MetricsGrid'
+export { default as AnalyticsChart } from './AnalyticsChart'
+export { default as SystemHealthCard } from './SystemHealthCard'
+export { default as PendingTasksCard } from './PendingTasksCard'
+export { default as QuickActionsPanel } from './QuickActionsPanel'
+export { default as RecentActivityFeed } from './RecentActivityFeed'

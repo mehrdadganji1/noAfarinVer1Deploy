@@ -1,0 +1,33 @@
+{
+  "name": "xp-service",
+  "version": "1.0.0",
+  "description": "XP and Levels Microservice for Gamification System",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "jest",
+    "seed:challenges": "ts-node src/seed/seedChallenges.ts"
+  },
+  "keywords": ["xp", "levels", "gamification", "microservice"],
+  "author": "Noafarin Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.5.0",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.2",
+    "axios": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.5.0",
+    "@types/cors": "^2.8.13",
+    "@types/jsonwebtoken": "^9.0.2",
+    "typescript": "^5.1.6",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1"
+  }
+}
