@@ -125,7 +125,7 @@ export default function DocumentUpload({
               <DocIcon className={`h-9 w-9 ${iconData.color}`} />
             </div>
             <div>
-              <CardTitle className="text-base">{requirement.label}</CardTitle>
+              <CardTitle className="text-base">{requirement.title}</CardTitle>
               <p className="text-sm text-gray-600 mt-1">{requirement.description}</p>
             </div>
           </div>

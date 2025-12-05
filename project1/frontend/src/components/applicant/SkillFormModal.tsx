@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -119,9 +120,9 @@ export default function SkillFormModal({
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50">
+      <div className="fixed inset-0 z-[9999]">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -226,4 +227,6 @@ export default function SkillFormModal({
       </div>
     </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 }

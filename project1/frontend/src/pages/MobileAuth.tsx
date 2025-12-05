@@ -73,14 +73,10 @@ const MobileAuth: FC = () => {
       }
       
       // Save authentication state using authStore
-      console.log('✅ Login successful!', data.data.user);
-      
-      // Use authStore to properly save auth state
       setAuth(data.data.user, data.data.token);
       
       // Navigate to dashboard based on role
       const userRole = Array.isArray(data.data.user.role) ? data.data.user.role[0] : data.data.user.role;
-      console.log('🔄 Redirecting to dashboard for role:', userRole);
       
       // Small delay to ensure state is persisted
       setTimeout(() => {

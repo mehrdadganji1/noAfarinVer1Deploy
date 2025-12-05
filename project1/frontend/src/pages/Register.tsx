@@ -87,8 +87,6 @@ export default function Register() {
       });
 
       if (response.data.success) {
-        console.log('✅ Registration successful!', response.data.data.user);
-        
         // Use authStore to properly save auth state
         setAuth(response.data.data.user, response.data.data.token);
         
@@ -96,7 +94,6 @@ export default function Register() {
         const userRole = Array.isArray(response.data.data.user.role) 
           ? response.data.data.user.role[0] 
           : response.data.data.user.role;
-        console.log('🔄 Redirecting to dashboard for role:', userRole);
         
         // Small delay to ensure state is persisted
         setTimeout(() => {

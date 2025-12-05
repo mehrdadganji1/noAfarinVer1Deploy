@@ -6,7 +6,7 @@
 /* Pinar Light */
 @font-face {
   font-family: 'Pinar';
-  src: url('/fonts/Pinar/Pinar-DS2-FD-Light.woff2') format('woff2');
+  src: url('/fonts/Pinar-DS2-FD-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -15,7 +15,7 @@
 /* Pinar Regular */
 @font-face {
   font-family: 'Pinar';
-  src: url('/fonts/Pinar/Pinar-DS2-FD-Regular.woff2') format('woff2');
+  src: url('/fonts/Pinar-DS2-FD-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -24,7 +24,7 @@
 /* Pinar Medium */
 @font-face {
   font-family: 'Pinar';
-  src: url('/fonts/Pinar/Pinar-DS2-FD-Medium.woff2') format('woff2');
+  src: url('/fonts/Pinar-DS2-FD-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -33,7 +33,7 @@
 /* Pinar SemiBold */
 @font-face {
   font-family: 'Pinar';
-  src: url('/fonts/Pinar/Pinar-DS2-FD-SemiBold.woff2') format('woff2');
+  src: url('/fonts/Pinar-DS2-FD-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -42,7 +42,7 @@
 /* Pinar Bold */
 @font-face {
   font-family: 'Pinar';
-  src: url('/fonts/Pinar/Pinar-DS2-FD-Bold.woff2') format('woff2');
+  src: url('/fonts/Pinar-DS2-FD-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -51,7 +51,7 @@
 /* Pinar ExtraBold */
 @font-face {
   font-family: 'Pinar';
-  src: url('/fonts/Pinar/Pinar-DS2-FD-ExtraBold.woff2') format('woff2');
+  src: url('/fonts/Pinar-DS2-FD-ExtraBold.woff2') format('woff2');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -60,7 +60,7 @@
 /* Pinar Black */
 @font-face {
   font-family: 'Pinar';
-  src: url('/fonts/Pinar/Pinar-DS2-FD-Black.woff2') format('woff2');
+  src: url('/fonts/Pinar-DS2-FD-Black.woff2') format('woff2');
   font-weight: 900;
   font-style: normal;
   font-display: swap;

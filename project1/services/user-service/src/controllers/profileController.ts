@@ -140,8 +140,11 @@ export const addEducation = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const education = req.body;
 
+    console.log('📚 Adding education:', { userId, education });
+
     const user = await User.findById(userId);
     if (!user) {
+      console.error('❌ User not found:', userId);
       return res.status(404).json({
         success: false,
         error: 'کاربر یافت نشد'
@@ -152,22 +155,46 @@ export const addEducation = async (req: Request, res: Response) => {
       user.educationHistory = [];
     }
 
-    // Convert date strings to Date objects
-    if (education.startDate) education.startDate = new Date(education.startDate);
-    if (education.endDate) education.endDate = new Date(education.endDate);
+    // Convert date strings to Date objects with validation
+    try {
+      if (education.startDate) {
+        const startDate = new Date(education.startDate);
+        if (isNaN(startDate.getTime())) {
+          throw new Error('تاریخ شروع نامعتبر است');
+        }
+        education.startDate = startDate;
+      }
+      if (education.endDate) {
+        const endDate = new Date(education.endDate);
+        if (isNaN(endDate.getTime())) {
+          throw new Error('تاریخ پایان نامعتبر است');
+        }
+        education.endDate = endDate;
+      }
+    } catch (dateError: any) {
+      console.error('❌ Date conversion error:', dateError);
+      return res.status(400).json({
+        success: false,
+        error: dateError.message || 'فرمت تاریخ نامعتبر است'
+      });
+    }
 
     user.educationHistory.push(education);
     await user.save();
+
+    console.log('✅ Education added successfully');
 
     res.json({
       success: true,
       data: { user }
     });
   } catch (error: any) {
-    console.error('Error adding education:', error);
+    console.error('❌ Error adding education:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
-      error: 'خطا در افزودن سابقه تحصیلی'
+      error: 'خطا در افزودن سابقه تحصیلی',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
@@ -177,8 +204,11 @@ export const updateEducation = async (req: Request, res: Response) => {
     const { userId, eduId } = req.params;
     const updates = req.body;
 
+    console.log('📝 Updating education:', { userId, eduId, updates });
+
     const user = await User.findById(userId);
     if (!user) {
+      console.error('❌ User not found:', userId);
       return res.status(404).json({
         success: false,
         error: 'کاربر یافت نشد'
@@ -190,15 +220,36 @@ export const updateEducation = async (req: Request, res: Response) => {
     );
 
     if (eduIndex === -1 || eduIndex === undefined) {
+      console.error('❌ Education not found:', eduId);
       return res.status(404).json({
         success: false,
         error: 'سابقه تحصیلی یافت نشد'
       });
     }
 
-    // Convert date strings to Date objects
-    if (updates.startDate) updates.startDate = new Date(updates.startDate);
-    if (updates.endDate) updates.endDate = new Date(updates.endDate);
+    // Convert date strings to Date objects with validation
+    try {
+      if (updates.startDate) {
+        const startDate = new Date(updates.startDate);
+        if (isNaN(startDate.getTime())) {
+          throw new Error('تاریخ شروع نامعتبر است');
+        }
+        updates.startDate = startDate;
+      }
+      if (updates.endDate) {
+        const endDate = new Date(updates.endDate);
+        if (isNaN(endDate.getTime())) {
+          throw new Error('تاریخ پایان نامعتبر است');
+        }
+        updates.endDate = endDate;
+      }
+    } catch (dateError: any) {
+      console.error('❌ Date conversion error:', dateError);
+      return res.status(400).json({
+        success: false,
+        error: dateError.message || 'فرمت تاریخ نامعتبر است'
+      });
+    }
 
     if (user.educationHistory) {
       user.educationHistory[eduIndex] = {
@@ -208,15 +259,19 @@ export const updateEducation = async (req: Request, res: Response) => {
       await user.save();
     }
 
+    console.log('✅ Education updated successfully');
+
     res.json({
       success: true,
       data: { user }
     });
   } catch (error: any) {
-    console.error('Error updating education:', error);
+    console.error('❌ Error updating education:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
-      error: 'خطا در به‌روزرسانی سابقه تحصیلی'
+      error: 'خطا در به‌روزرسانی سابقه تحصیلی',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
@@ -260,8 +315,11 @@ export const addExperience = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const experience = req.body;
 
+    console.log('💼 Adding experience:', { userId, experience });
+
     const user = await User.findById(userId);
     if (!user) {
+      console.error('❌ User not found:', userId);
       return res.status(404).json({
         success: false,
         error: 'کاربر یافت نشد'
@@ -272,22 +330,46 @@ export const addExperience = async (req: Request, res: Response) => {
       user.workExperience = [];
     }
 
-    // Convert date strings to Date objects
-    if (experience.startDate) experience.startDate = new Date(experience.startDate);
-    if (experience.endDate) experience.endDate = new Date(experience.endDate);
+    // Convert date strings to Date objects with validation
+    try {
+      if (experience.startDate) {
+        const startDate = new Date(experience.startDate);
+        if (isNaN(startDate.getTime())) {
+          throw new Error('تاریخ شروع نامعتبر است');
+        }
+        experience.startDate = startDate;
+      }
+      if (experience.endDate) {
+        const endDate = new Date(experience.endDate);
+        if (isNaN(endDate.getTime())) {
+          throw new Error('تاریخ پایان نامعتبر است');
+        }
+        experience.endDate = endDate;
+      }
+    } catch (dateError: any) {
+      console.error('❌ Date conversion error:', dateError);
+      return res.status(400).json({
+        success: false,
+        error: dateError.message || 'فرمت تاریخ نامعتبر است'
+      });
+    }
 
     user.workExperience.push(experience);
     await user.save();
+
+    console.log('✅ Experience added successfully');
 
     res.json({
       success: true,
       data: { user }
     });
   } catch (error: any) {
-    console.error('Error adding experience:', error);
+    console.error('❌ Error adding experience:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
-      error: 'خطا در افزودن سابقه کاری'
+      error: 'خطا در افزودن سابقه کاری',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
@@ -297,8 +379,11 @@ export const updateExperience = async (req: Request, res: Response) => {
     const { userId, expId } = req.params;
     const updates = req.body;
 
+    console.log('📝 Updating experience:', { userId, expId, updates });
+
     const user = await User.findById(userId);
     if (!user) {
+      console.error('❌ User not found:', userId);
       return res.status(404).json({
         success: false,
         error: 'کاربر یافت نشد'
@@ -310,15 +395,36 @@ export const updateExperience = async (req: Request, res: Response) => {
     );
 
     if (expIndex === -1 || expIndex === undefined) {
+      console.error('❌ Experience not found:', expId);
       return res.status(404).json({
         success: false,
         error: 'سابقه کاری یافت نشد'
       });
     }
 
-    // Convert date strings to Date objects
-    if (updates.startDate) updates.startDate = new Date(updates.startDate);
-    if (updates.endDate) updates.endDate = new Date(updates.endDate);
+    // Convert date strings to Date objects with validation
+    try {
+      if (updates.startDate) {
+        const startDate = new Date(updates.startDate);
+        if (isNaN(startDate.getTime())) {
+          throw new Error('تاریخ شروع نامعتبر است');
+        }
+        updates.startDate = startDate;
+      }
+      if (updates.endDate) {
+        const endDate = new Date(updates.endDate);
+        if (isNaN(endDate.getTime())) {
+          throw new Error('تاریخ پایان نامعتبر است');
+        }
+        updates.endDate = endDate;
+      }
+    } catch (dateError: any) {
+      console.error('❌ Date conversion error:', dateError);
+      return res.status(400).json({
+        success: false,
+        error: dateError.message || 'فرمت تاریخ نامعتبر است'
+      });
+    }
 
     if (user.workExperience) {
       user.workExperience[expIndex] = {
@@ -328,15 +434,19 @@ export const updateExperience = async (req: Request, res: Response) => {
       await user.save();
     }
 
+    console.log('✅ Experience updated successfully');
+
     res.json({
       success: true,
       data: { user }
     });
   } catch (error: any) {
-    console.error('Error updating experience:', error);
+    console.error('❌ Error updating experience:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
-      error: 'خطا در به‌روزرسانی سابقه کاری'
+      error: 'خطا در به‌روزرسانی سابقه کاری',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
@@ -380,6 +490,8 @@ export const addSkill = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const skill = req.body;
 
+    console.log('🎯 Adding skill:', { userId, skill });
+
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -392,7 +504,16 @@ export const addSkill = async (req: Request, res: Response) => {
       user.skills = [];
     }
 
-    user.skills.push(skill);
+    // Map frontend 'proficiency' to backend 'level'
+    const skillToAdd = {
+      name: skill.name,
+      category: skill.category,
+      level: skill.proficiency || skill.level || 'beginner',
+    };
+
+    console.log('📝 Skill to add:', skillToAdd);
+
+    user.skills.push(skillToAdd as any);
     await user.save();
 
     res.json({
@@ -418,6 +539,11 @@ export const updateSkill = async (req: Request, res: Response) => {
     // Remove _id from updates to prevent conflicts
     const { _id, ...skillUpdates } = updates;
 
+    // Map frontend 'proficiency' to backend 'level'
+    const levelValue = skillUpdates.proficiency || skillUpdates.level || 'beginner';
+
+    console.log('🔄 Mapped level:', levelValue);
+
     // Use atomic update with positional operator
     const user = await User.findOneAndUpdate(
       { _id: userId, 'skills._id': skillId },
@@ -425,7 +551,7 @@ export const updateSkill = async (req: Request, res: Response) => {
         $set: { 
           'skills.$.name': skillUpdates.name,
           'skills.$.category': skillUpdates.category,
-          'skills.$.proficiency': skillUpdates.proficiency
+          'skills.$.level': levelValue
         }
       },
       { new: true, runValidators: true }

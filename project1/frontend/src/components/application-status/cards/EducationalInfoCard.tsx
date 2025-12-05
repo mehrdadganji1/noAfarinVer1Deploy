@@ -45,7 +45,7 @@ export const EducationalInfoCard: FC<EducationalInfoCardProps> = ({ application 
           />
           <InfoRow
             label="مقطع"
-            value={DEGREE_LABELS[application.degree] || application.degree}
+            value={application.degree ? (DEGREE_LABELS[application.degree] || application.degree) : '-'}
             icon={GraduationCap}
             iconColor="text-indigo-500"
           />

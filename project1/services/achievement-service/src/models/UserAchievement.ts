@@ -12,7 +12,7 @@ export interface IUserAchievement extends Document {
 
 const UserAchievementSchema = new Schema<IUserAchievement>(
   {
-    userId: { type: String, required: true, index: true },
+    userId: { type: String, required: true },
     achievementId: {
       type: Schema.Types.ObjectId,
       ref: 'Achievement',

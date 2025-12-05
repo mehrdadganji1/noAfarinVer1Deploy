@@ -4,11 +4,10 @@
  */
 
 import { motion } from 'framer-motion';
-import { Suspense, lazy } from 'react';
+import { useAACOApplication } from '@/hooks/useAACOApplication';
 import { StatusSkeleton } from '@/components/pending/shared';
-
-// Lazy load the status component for better performance
-const ApplicationStatus = lazy(() => import('@/pages/ApplicationStatus'));
+import { StatusPageHeader, StatusTimeline } from '@/components/application-status';
+import type { ApplicationStatus } from '@/components/application-status/types';
 
 // Page animation variants
 const pageVariants = {
@@ -25,16 +24,26 @@ const pageVariants = {
 };
 
 export default function PendingStatus() {
+  const { application, isLoadingApplication } = useAACOApplication();
+
+  if (isLoadingApplication) {
+    return <StatusSkeleton />;
+  }
+
+  const applicationStatus = (application?.status || 'submitted') as ApplicationStatus;
+
   return (
     <motion.div
-      className="w-[90%] mx-auto"
+      className="w-[90%] mx-auto space-y-6"
       variants={pageVariants}
       initial="hidden"
       animate="visible"
     >
-      <Suspense fallback={<StatusSkeleton />}>
-        <ApplicationStatus />
-      </Suspense>
+      <StatusPageHeader 
+        applicationStatus={applicationStatus}
+        submittedDate={application?.submittedAt ? new Date(application.submittedAt).toLocaleDateString('fa-IR') : undefined}
+      />
+      <StatusTimeline status={applicationStatus} />
     </motion.div>
   );
 }

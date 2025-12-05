@@ -194,3 +194,15 @@ export type BoxShadow = keyof typeof boxShadows
 export type DropShadow = keyof typeof dropShadows
 export type Blur = keyof typeof blur
 export type GlassPreset = keyof typeof glassPresets
+
+// Main shadows export
+export const shadows = {
+  boxShadows,
+  dropShadows,
+  textShadows,
+  blur,
+  backdropBlur,
+  glassPresets,
+  gradientOverlays,
+  tailwindShadows,
+}

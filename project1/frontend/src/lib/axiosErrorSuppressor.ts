@@ -29,7 +29,22 @@ const EXPECTED_404_PATTERNS = [
   '/stats/',
   '/achievements/',
   '/streaks/',
-  '/challenges'
+  '/challenges',
+  '/projects',
+  '/fundings',
+  '/events'
+];
+
+// List of URL patterns where 503 errors should be suppressed (optional services)
+const EXPECTED_503_PATTERNS = [
+  '/projects',
+  '/teams',
+  '/events',
+  '/trainings',
+  '/fundings',
+  '/achievements',
+  '/xp/',
+  '/evaluations'
 ];
 
 // List of URL patterns where 500 errors should show user-friendly messages
@@ -64,6 +79,16 @@ function shouldSuppressError(args: any[]): boolean {
     if (matchesPattern) {
       // Log user-friendly message instead
       console.warn('⚠️ خطا در سرور. لطفاً دوباره تلاش کنید.');
+      return true;
+    }
+  }
+  
+  // Check if it's a 503 error on optional services
+  const is503 = errorString.includes('503') || errorString.includes('Service Unavailable');
+  if (is503) {
+    const matchesPattern = EXPECTED_503_PATTERNS.some(pattern => errorString.includes(pattern));
+    if (matchesPattern) {
+      // Completely suppress - optional service not available
       return true;
     }
   }

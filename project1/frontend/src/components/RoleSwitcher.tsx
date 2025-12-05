@@ -35,6 +35,7 @@ export default function RoleSwitcher({ onRoleChange }: RoleSwitcherProps) {
   const getRoleBadgeColor = (role: UserRole) => {
     const colors: Record<UserRole, string> = {
       [UserRole.ADMIN]: 'border-red-500 bg-red-50',
+      [UserRole.DIRECTOR]: 'border-rose-600 bg-rose-50',
       [UserRole.MANAGER]: 'border-purple-500 bg-purple-50',
       [UserRole.COORDINATOR]: 'border-blue-500 bg-blue-50',
       [UserRole.JUDGE]: 'border-yellow-500 bg-yellow-50',

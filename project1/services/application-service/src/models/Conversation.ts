@@ -1,10 +1,12 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 export interface IConversation extends mongoose.Document {
   participants: mongoose.Types.ObjectId[];
   lastMessage?: {
     content: string;
     senderId: mongoose.Types.ObjectId;
+    senderName?: string;
     createdAt: Date;
   };
   unreadCount: Map<string, number>;
@@ -26,6 +28,7 @@ const conversationSchema = new Schema<IConversation>(
         type: Schema.Types.ObjectId,
         ref: 'User',
       },
+      senderName: String,
       createdAt: Date,
     },
     unreadCount: {

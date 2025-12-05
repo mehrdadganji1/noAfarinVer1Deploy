@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { DirectorStats } from '@/types/director.types'
-import { directorApi } from '@/services/directorApi'
+import api from '@/lib/api'
 
 // Mock data - fallback if API fails
 const mockDirectorStats: DirectorStats = {
@@ -147,10 +147,9 @@ export function useDirectorStats(refetchInterval?: number) {
     queryFn: async () => {
       try {
         // Try to fetch from API
-        const data = await directorApi.getStats()
-        return data
-      } catch (error) {
-        console.warn('Failed to fetch director stats from API, using mock data:', error)
+        const response = await api.get('/users/director/stats')
+        return response.data
+      } catch {
         // Fallback to mock data
         return mockDirectorStats
       }
@@ -167,10 +166,9 @@ export function useSystemHealth() {
     queryKey: ['system-health'],
     queryFn: async () => {
       try {
-        const data = await directorApi.getSystemHealth()
-        return data
-      } catch (error) {
-        console.warn('Failed to fetch system health, using mock data:', error)
+        const response = await api.get('/users/director/system-health')
+        return response.data
+      } catch {
         return mockDirectorStats.systemHealth
       }
     },

@@ -292,3 +292,15 @@ export type FontWeight = keyof typeof fontWeights
 export type FontSize = keyof typeof fontSizes
 export type LineHeight = keyof typeof lineHeights
 export type LetterSpacing = keyof typeof letterSpacings
+
+// Main typography export
+export const typography = {
+  fontFamilies,
+  fontWeights,
+  fontSizes,
+  lineHeights,
+  letterSpacings,
+  typographyStyles,
+  responsiveTypography,
+  tailwindTypography,
+}

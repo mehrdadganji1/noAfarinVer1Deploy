@@ -106,10 +106,10 @@ export default function EditApplicationModal({ application, onClose }: EditAppli
                     اطلاعات شخصی
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField label="نام" icon={User} value={formData.firstName} onChange={(v) => handleChange('firstName', v)} error={errors.firstName} />
-                    <FormField label="نام خانوادگی" icon={User} value={formData.lastName} onChange={(v) => handleChange('lastName', v)} error={errors.lastName} />
-                    <FormField label="ایمیل" icon={Mail} type="email" value={formData.email} onChange={(v) => handleChange('email', v)} error={errors.email} />
-                    <FormField label="شماره تلفن" icon={Phone} value={formData.phoneNumber} onChange={(v) => handleChange('phoneNumber', v)} error={errors.phoneNumber} />
+                    <FormField label="نام" icon={User} value={formData.firstName} onChange={(v: string) => handleChange('firstName', v)} error={errors.firstName} />
+                    <FormField label="نام خانوادگی" icon={User} value={formData.lastName} onChange={(v: string) => handleChange('lastName', v)} error={errors.lastName} />
+                    <FormField label="ایمیل" icon={Mail} type="email" value={formData.email} onChange={(v: string) => handleChange('email', v)} error={errors.email} />
+                    <FormField label="شماره تلفن" icon={Phone} value={formData.phoneNumber} onChange={(v: string) => handleChange('phoneNumber', v)} error={errors.phoneNumber} />
                   </div>
                 </CardContent>
               </Card>
@@ -121,8 +121,8 @@ export default function EditApplicationModal({ application, onClose }: EditAppli
                     اطلاعات تحصیلی
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField label="دانشگاه" icon={MapPin} value={formData.university} onChange={(v) => handleChange('university', v)} error={errors.university} />
-                    <FormField label="رشته تحصیلی" icon={Award} value={formData.major} onChange={(v) => handleChange('major', v)} error={errors.major} />
+                    <FormField label="دانشگاه" icon={MapPin} value={formData.university} onChange={(v: string) => handleChange('university', v)} error={errors.university} />
+                    <FormField label="رشته تحصیلی" icon={Award} value={formData.major} onChange={(v: string) => handleChange('major', v)} error={errors.major} />
                     <div>
                       <label className="block text-sm font-medium mb-2">مقطع تحصیلی *</label>
                       <select value={formData.degree} onChange={(e) => handleChange('degree', e.target.value)} className={`w-full px-3 py-2 border rounded-lg ${errors.degree ? 'border-red-500' : 'border-gray-300'}`}>
@@ -133,7 +133,7 @@ export default function EditApplicationModal({ application, onClose }: EditAppli
                       </select>
                       {errors.degree && <p className="text-red-500 text-xs mt-1">{errors.degree}</p>}
                     </div>
-                    <FormField label="شماره دانشجویی" icon={FileText} value={formData.studentId} onChange={(v) => handleChange('studentId', v)} error={errors.studentId} />
+                    <FormField label="شماره دانشجویی" icon={FileText} value={formData.studentId} onChange={(v: string) => handleChange('studentId', v)} error={errors.studentId} />
                   </div>
                 </CardContent>
               </Card>

@@ -12,10 +12,22 @@ interface ModernSocialLinksSectionProps {
   isLoading?: boolean;
 }
 
-// Custom SVG icons
+// Social platform icons
 const LinkedInIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+  </svg>
+);
+
+const GitHubIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+  </svg>
+);
+
+const TwitterIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
   </svg>
 );
 
@@ -31,59 +43,12 @@ const TelegramIcon = () => (
   </svg>
 );
 
-const TwitterIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-  </svg>
-);
-
-const GitHubIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-  </svg>
-);
-
 const socialPlatforms = [
-  {
-    key: 'linkedin' as keyof SocialLinks,
-    label: 'لینکدین',
-    icon: LinkedInIcon,
-    placeholder: 'https://linkedin.com/in/username',
-    bgColor: 'bg-[#0A66C2]',
-    borderColor: 'border-[#0A66C2]',
-  },
-  {
-    key: 'github' as keyof SocialLinks,
-    label: 'گیت‌هاب',
-    icon: GitHubIcon,
-    placeholder: 'https://github.com/username',
-    bgColor: 'bg-[#181717]',
-    borderColor: 'border-[#181717]',
-  },
-  {
-    key: 'twitter' as keyof SocialLinks,
-    label: 'توییتر / ایکس',
-    icon: TwitterIcon,
-    placeholder: 'https://x.com/username',
-    bgColor: 'bg-black',
-    borderColor: 'border-black',
-  },
-  {
-    key: 'portfolio' as keyof SocialLinks,
-    label: 'اینستاگرام',
-    icon: InstagramIcon,
-    placeholder: 'https://instagram.com/username',
-    bgColor: 'bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737]',
-    borderColor: 'border-pink-500',
-  },
-  {
-    key: 'other' as keyof SocialLinks,
-    label: 'تلگرام',
-    icon: TelegramIcon,
-    placeholder: 'https://t.me/username',
-    bgColor: 'bg-[#0088cc]',
-    borderColor: 'border-[#0088cc]',
-  },
+  { key: 'linkedin' as keyof SocialLinks, label: 'لینکدین', icon: LinkedInIcon, placeholder: 'https://linkedin.com/in/username', color: '#0A66C2' },
+  { key: 'github' as keyof SocialLinks, label: 'گیت‌هاب', icon: GitHubIcon, placeholder: 'https://github.com/username', color: '#181717' },
+  { key: 'twitter' as keyof SocialLinks, label: 'توییتر / ایکس', icon: TwitterIcon, placeholder: 'https://x.com/username', color: '#000000' },
+  { key: 'portfolio' as keyof SocialLinks, label: 'اینستاگرام', icon: InstagramIcon, placeholder: 'https://instagram.com/username', color: '#E4405F' },
+  { key: 'other' as keyof SocialLinks, label: 'تلگرام', icon: TelegramIcon, placeholder: 'https://t.me/username', color: '#0088cc' },
 ];
 
 export function ModernSocialLinksSection({
@@ -95,9 +60,7 @@ export function ModernSocialLinksSection({
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    if (socialLinks) {
-      setFormData(socialLinks);
-    }
+    if (socialLinks) setFormData(socialLinks);
   }, [socialLinks]);
 
   const handleChange = (field: keyof SocialLinks, value: string) => {
@@ -117,7 +80,6 @@ export function ModernSocialLinksSection({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
       className="space-y-6"
     >
       <ModernSectionHeader
@@ -128,8 +90,8 @@ export function ModernSocialLinksSection({
         gradient="from-pink-500 to-rose-500"
       />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {socialPlatforms.map((platform, index) => {
             const Icon = platform.icon;
             const value = formData[platform.key] || '';
@@ -141,106 +103,74 @@ export function ModernSocialLinksSection({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                whileHover={{ scale: 1.01 }}
-                className={`relative rounded-2xl border-2 transition-all duration-300 overflow-hidden ${
-                  hasValue
-                    ? `${platform.borderColor} bg-gradient-to-l from-green-50/50 to-white shadow-md`
-                    : 'border-gray-300 bg-white hover:border-gray-400 hover:shadow-sm'
+                className={`relative rounded-xl border transition-all duration-200 overflow-hidden ${
+                  hasValue ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-200 bg-white hover:border-slate-300'
                 }`}
               >
-                <div className="flex items-center gap-4 p-4">
+                <div className="flex items-center gap-3 p-3">
                   {/* Icon */}
                   <div
-                    className={`w-12 h-12 rounded-xl ${platform.bgColor} flex items-center justify-center text-white flex-shrink-0 shadow-lg`}
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-white flex-shrink-0 shadow-md"
+                    style={{ backgroundColor: platform.color }}
                   >
                     <Icon />
                   </div>
 
                   {/* Input */}
                   <div className="flex-1 min-w-0">
-                    <label className="block text-xs font-bold text-gray-600 mb-1.5">
-                      {platform.label}
-                    </label>
+                    <label className="block text-[10px] font-bold text-slate-500 mb-1">{platform.label}</label>
                     <Input
                       type="url"
                       value={value}
                       onChange={(e) => handleChange(platform.key, e.target.value)}
                       placeholder={platform.placeholder}
-                      className="h-9 text-sm border-0 bg-gray-50 focus:bg-white focus-visible:ring-2 focus-visible:ring-purple-500 placeholder:text-gray-400 rounded-lg"
+                      className="h-8 text-xs border-0 bg-slate-50 focus:bg-white focus-visible:ring-1 focus-visible:ring-violet-400 placeholder:text-slate-400 rounded-lg"
                       dir="ltr"
                     />
                   </div>
 
-                  {/* Status indicator */}
-                  <div className="flex items-center gap-2">
-                    {hasValue && (
-                      <>
-                        <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                          <Check className="w-3.5 h-3.5 text-white" />
-                        </div>
-                        <a
-                          href={value}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      </>
-                    )}
-                  </div>
+                  {/* Status */}
+                  {hasValue && (
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                        <Check className="w-3 h-3 text-white" />
+                      </div>
+                      <a
+                        href={value}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 text-slate-400 hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-colors"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Submit section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex items-center justify-between pt-4 border-t-2 border-gray-200"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex -space-x-2 space-x-reverse">
-              {socialPlatforms.slice(0, 3).map((p, i) => {
-                const Icon = p.icon;
-                const hasVal = formData[p.key]?.trim();
-                return (
-                  <div
-                    key={p.key}
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs ${
-                      hasVal ? p.bgColor : 'bg-gray-300'
-                    }`}
-                    style={{ zIndex: 3 - i }}
-                  >
-                    <Icon />
-                  </div>
-                );
-              })}
-            </div>
-            <p className="text-sm text-gray-600">
-              {filledCount > 0 ? (
-                <span className="font-semibold text-green-600">{filledCount} شبکه متصل</span>
-              ) : (
-                'هنوز شبکه‌ای متصل نشده'
-              )}
-            </p>
-          </div>
+        {/* Submit */}
+        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+          <p className="text-xs text-slate-500">
+            {filledCount > 0 ? (
+              <span className="font-semibold text-emerald-600">{filledCount} شبکه متصل</span>
+            ) : (
+              'هنوز شبکه‌ای متصل نشده'
+            )}
+          </p>
 
           <Button
             type="submit"
+            size="sm"
             disabled={isLoading || !hasChanges}
-            className="bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 disabled:opacity-50 shadow-lg"
+            className="bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 disabled:opacity-50 shadow-md"
           >
-            {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin ml-2" />
-            ) : (
-              <Save className="w-4 h-4 ml-2" />
-            )}
-            ذخیره تغییرات
+            {isLoading ? <Loader2 className="w-4 h-4 animate-spin ml-1.5" /> : <Save className="w-4 h-4 ml-1.5" />}
+            ذخیره
           </Button>
-        </motion.div>
+        </div>
       </form>
     </motion.div>
   );

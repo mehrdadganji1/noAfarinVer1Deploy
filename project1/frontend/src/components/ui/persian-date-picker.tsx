@@ -33,7 +33,7 @@ export function PersianDatePicker({
   maxDate,
 }: PersianDatePickerProps) {
   // Convert ISO string to DateObject for the picker
-  const getDateValue = () => {
+  const getDateValue = (): DateObject | null => {
     if (!value) return null;
     try {
       // Handle YYYY-MM format
@@ -87,7 +87,7 @@ export function PersianDatePicker({
         format={onlyMonthPicker ? 'MMMM YYYY' : 'DD MMMM YYYY'}
         containerClassName="w-full"
         inputClass={cn(
-          'w-full h-11 px-3 pr-10 border rounded-lg bg-white text-sm transition-colors',
+          'w-full h-11 px-3 pr-10 border rounded-lg bg-white text-sm transition-colors cursor-pointer text-right',
           'focus:outline-none focus:ring-2 focus:ring-offset-0',
           disabled && 'bg-gray-100 cursor-not-allowed opacity-60',
           error
@@ -99,9 +99,7 @@ export function PersianDatePicker({
         calendarPosition="bottom-right"
         fixMainPosition
         arrow={false}
-        style={{
-          width: '100%',
-        }}
+        style={{ width: '100%' }}
       />
       <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
     </div>

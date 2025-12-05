@@ -16,7 +16,8 @@ import {
   Award,
   FileCheck
 } from 'lucide-react'
-import { Document, DocumentStatus, formatFileSize, getDocumentRequirement } from '@/types/document'
+import { Document, formatFileSize, getDocumentRequirement } from '@/types/document'
+import type { DocumentStatus } from '@/types/document'
 
 interface DocumentCardProps {
   document: Document
@@ -56,12 +57,12 @@ export default function DocumentCard({
     return { icon: FileText, color: 'text-[#7209B7]', bg: 'bg-gradient-to-br from-cyan-50 to-purple-50', borderColor: 'border-purple-200' }
   }
 
-  const statusColors = {
-    [DocumentStatus.VERIFIED]: { bg: 'bg-green-50', border: 'border-l-green-500', text: 'text-green-600', icon: CheckCircle2, label: 'تایید شده' },
-    [DocumentStatus.REJECTED]: { bg: 'bg-red-50', border: 'border-l-red-500', text: 'text-red-600', icon: XCircle, label: 'رد شده' },
-    [DocumentStatus.PENDING]: { bg: 'bg-yellow-50', border: 'border-l-yellow-500', text: 'text-yellow-600', icon: Clock, label: 'در انتظار' }
+  const statusColors: Record<DocumentStatus, { bg: string; border: string; text: string; icon: any; label: string }> = {
+    'verified': { bg: 'bg-green-50', border: 'border-l-green-500', text: 'text-green-600', icon: CheckCircle2, label: 'تایید شده' },
+    'rejected': { bg: 'bg-red-50', border: 'border-l-red-500', text: 'text-red-600', icon: XCircle, label: 'رد شده' },
+    'pending': { bg: 'bg-yellow-50', border: 'border-l-yellow-500', text: 'text-yellow-600', icon: Clock, label: 'در انتظار' }
   }
-  const status = statusColors[document.status] || statusColors[DocumentStatus.PENDING]
+  const status = statusColors[document.status] || statusColors['pending']
   const StatusIcon = status.icon
 
   const iconData = getDocumentIcon()
@@ -77,7 +78,7 @@ export default function DocumentCard({
               <DocIcon className={`h-8 w-8 ${iconData.color}`} />
             </div>
             <div>
-              <CardTitle className="text-base">{requirement?.label || document.type}</CardTitle>
+              <CardTitle className="text-base">{requirement?.title || document.type}</CardTitle>
               <p className="text-sm text-gray-600 mt-1">{document.fileName}</p>
             </div>
           </div>
@@ -101,7 +102,7 @@ export default function DocumentCard({
           </div>
 
           {/* Rejection Reason */}
-          {document.status === DocumentStatus.REJECTED && document.rejectionReason && (
+          {document.status === 'rejected' && document.rejectionReason && (
             <div className="p-3 bg-red-100 border border-red-300 rounded-lg">
               <div className="flex items-start gap-2">
                 <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
@@ -149,7 +150,7 @@ export default function DocumentCard({
                 </Button>
               )}
               
-              {onDelete && document.status === DocumentStatus.PENDING && (
+              {onDelete && document.status === 'pending' && (
                 <Button
                   variant="outline"
                   size="sm"

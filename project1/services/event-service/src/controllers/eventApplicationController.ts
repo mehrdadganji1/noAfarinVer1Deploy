@@ -3,18 +3,20 @@ import EventApplication, { EventApplicationStatus } from '../models/EventApplica
 import Event from '../models/Event';
 import mongoose from 'mongoose';
 
-interface AuthRequest extends Request {
+// Extended Request interface with user property
+interface AuthenticatedRequest extends Request {
   user?: {
+    userId: string;
     id: string;
     email: string;
-    role: string;
+    role: string | string[];
   };
 }
 
 /**
  * Submit event application
  */
-export const submitEventApplication = async (req: AuthRequest, res: Response): Promise<void> => {
+export const submitEventApplication = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user?.id;
     const { eventId } = req.params;
@@ -80,7 +82,7 @@ export const submitEventApplication = async (req: AuthRequest, res: Response): P
 /**
  * Get my event applications
  */
-export const getMyEventApplications = async (req: AuthRequest, res: Response): Promise<void> => {
+export const getMyEventApplications = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user?.id;
 
@@ -113,7 +115,7 @@ export const getMyEventApplications = async (req: AuthRequest, res: Response): P
 /**
  * Get all event applications (Admin/Director only)
  */
-export const getAllEventApplications = async (req: AuthRequest, res: Response): Promise<void> => {
+export const getAllEventApplications = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { status, eventId, page = 1, limit = 20, search } = req.query;
 
@@ -170,7 +172,7 @@ export const getAllEventApplications = async (req: AuthRequest, res: Response): 
 /**
  * Get event application by ID
  */
-export const getEventApplicationById = async (req: AuthRequest, res: Response): Promise<void> => {
+export const getEventApplicationById = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
@@ -203,7 +205,7 @@ export const getEventApplicationById = async (req: AuthRequest, res: Response): 
 /**
  * Review event application (Admin/Director only)
  */
-export const reviewEventApplication = async (req: AuthRequest, res: Response): Promise<void> => {
+export const reviewEventApplication = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const reviewerId = req.user?.id;
@@ -249,7 +251,7 @@ export const reviewEventApplication = async (req: AuthRequest, res: Response): P
 /**
  * Approve event application (Admin/Director only)
  */
-export const approveEventApplication = async (req: AuthRequest, res: Response): Promise<void> => {
+export const approveEventApplication = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const { reviewNotes } = req.body;
@@ -300,7 +302,7 @@ export const approveEventApplication = async (req: AuthRequest, res: Response): 
 /**
  * Reject event application (Admin/Director only)
  */
-export const rejectEventApplication = async (req: AuthRequest, res: Response): Promise<void> => {
+export const rejectEventApplication = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const { reviewNotes } = req.body;
@@ -358,7 +360,7 @@ export const rejectEventApplication = async (req: AuthRequest, res: Response): P
 /**
  * Get event application stats (Admin/Director only)
  */
-export const getEventApplicationStats = async (req: AuthRequest, res: Response): Promise<void> => {
+export const getEventApplicationStats = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { eventId } = req.query;
 
@@ -401,7 +403,7 @@ export const getEventApplicationStats = async (req: AuthRequest, res: Response):
 /**
  * Bulk approve event applications (Admin/Director only)
  */
-export const bulkApproveEventApplications = async (req: AuthRequest, res: Response): Promise<void> => {
+export const bulkApproveEventApplications = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { applicationIds, reviewNotes } = req.body;
     const reviewerId = req.user?.id;
@@ -457,7 +459,7 @@ export const bulkApproveEventApplications = async (req: AuthRequest, res: Respon
 /**
  * Bulk reject event applications (Admin/Director only)
  */
-export const bulkRejectEventApplications = async (req: AuthRequest, res: Response): Promise<void> => {
+export const bulkRejectEventApplications = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { applicationIds, reviewNotes } = req.body;
     const reviewerId = req.user?.id;

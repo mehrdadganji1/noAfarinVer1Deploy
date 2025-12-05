@@ -1,22 +1,15 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import api from '@/lib/api'
 import { PageSkeleton } from '@/components/ui/page-skeleton'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { ClipboardCheck, LayoutGrid, List, Download } from 'lucide-react'
-import { toast } from '@/components/ui/toast'
+import { ClipboardCheck } from 'lucide-react'
 import {
     ApplicationsFilters,
     ApplicationsList,
     ApplicationDetailsModal,
-    BulkActionsBar,
-    AdvancedFilters,
-    ApplicationsTimeline,
-    ExportDialog,
 } from '@/components/director/applications'
-import type { FilterValues } from '@/components/director/applications/AdvancedFilters'
 
 export interface Application {
     _id: string
@@ -42,16 +35,11 @@ export interface Application {
 }
 
 export default function DirectorApplications() {
-    const queryClient = useQueryClient()
     const [statusFilter, setStatusFilter] = useState('all')
     const [searchQuery, setSearchQuery] = useState('')
     const [debouncedSearch, setDebouncedSearch] = useState('')
     const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
     const [page, setPage] = useState(1)
-    const [viewMode, setViewMode] = useState<'grid' | 'timeline'>('grid')
-    const [selectedIds, setSelectedIds] = useState<string[]>([])
-    const [advancedFilters, setAdvancedFilters] = useState<FilterValues>({})
-    const [showExportDialog, setShowExportDialog] = useState(false)
 
     // Debounce search
     useEffect(() => {

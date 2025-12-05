@@ -78,11 +78,11 @@ export const StartupIdeaCard: FC<StartupIdeaCardProps> = ({ application }) => {
           )}
 
           {/* Skills */}
-          {application.skills?.length > 0 && (
+          {application.skills && application.skills.length > 0 && (
             <div>
               <p className="text-xs text-gray-500 font-medium mb-2">مهارت‌ها</p>
               <div className="flex flex-wrap gap-2">
-                {application.skills.map((skill, index) => (
+                {application.skills?.map((skill, index) => (
                   <Badge 
                     key={index} 
                     variant="outline"

@@ -9,6 +9,7 @@ interface RoleBadgeProps {
 export default function RoleBadge({ role, className = '' }: RoleBadgeProps) {
   const colors: Record<UserRole, string> = {
     [UserRole.ADMIN]: 'bg-red-500 text-white',
+    [UserRole.DIRECTOR]: 'bg-rose-600 text-white',
     [UserRole.MANAGER]: 'bg-purple-500 text-white',
     [UserRole.COORDINATOR]: 'bg-blue-500 text-white',
     [UserRole.JUDGE]: 'bg-yellow-500 text-white',

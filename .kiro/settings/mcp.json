@@ -25,6 +25,18 @@
         "search_memories",
         "get_memory"
       ]
+    },
+    "postgres": {
+      "command": "uvx",
+      "args": [
+        "postgres-mcp",
+        "--access-mode=unrestricted"
+      ],
+      "env": {
+        "DATABASE_URI": "postgresql://username:password@localhost:5432/dbname"
+      },
+      "disabled": true,
+      "autoApprove": []
     }
   }
 }

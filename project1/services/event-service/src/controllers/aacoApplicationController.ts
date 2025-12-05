@@ -1,19 +1,20 @@
 import { Request, Response } from 'express';
 import AACOApplication, { AACOApplicationStatus } from '../models/AACOApplication';
 
-interface AuthRequest extends Request {
+// Extended Request interface with user property
+interface AuthenticatedRequest extends Request {
   user?: {
-    userId?: string;
+    userId: string;
     id: string;
     email: string;
-    role: string;
+    role: string | string[];
   };
 }
 
 /**
  * Submit or update AACo application
  */
-export const submitApplication = async (req: AuthRequest, res: Response) => {
+export const submitApplication = async (req: AuthenticatedRequest, res: Response) => {
   try {
     console.log('📝 AACo Application Submit Request:', {
       user: req.user,
@@ -125,7 +126,7 @@ export const submitApplication = async (req: AuthRequest, res: Response) => {
 /**
  * Get user's AACo application
  */
-export const getMyApplication = async (req: AuthRequest, res: Response) => {
+export const getMyApplication = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.userId || req.user?.id;
     
@@ -162,7 +163,7 @@ export const getMyApplication = async (req: AuthRequest, res: Response) => {
 /**
  * Update user's AACo application
  */
-export const updateApplication = async (req: AuthRequest, res: Response) => {
+export const updateApplication = async (req: AuthenticatedRequest, res: Response) => {
   try {
     console.log('📝 AACo Application Update Request:', {
       user: req.user,
@@ -259,7 +260,7 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
 /**
  * Check if user has submitted AACo application
  */
-export const checkApplicationStatus = async (req: AuthRequest, res: Response) => {
+export const checkApplicationStatus = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.userId || req.user?.id;
     
@@ -286,7 +287,7 @@ export const checkApplicationStatus = async (req: AuthRequest, res: Response) =>
 /**
  * Get all AACo applications (Admin/Director only)
  */
-export const getAllApplications = async (req: AuthRequest, res: Response) => {
+export const getAllApplications = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { status, page = 1, limit = 20, search } = req.query;
 
@@ -340,7 +341,7 @@ export const getAllApplications = async (req: AuthRequest, res: Response) => {
  * - نقش کاربر تغییر نمی‌کند (همچنان applicant می‌ماند)
  * - بعد از مصاحبه و تایید نهایی، نقش به club_member تغییر می‌کند
  */
-export const updateApplicationStatus = async (req: AuthRequest, res: Response) => {
+export const updateApplicationStatus = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { status, reviewNotes } = req.body;
@@ -393,7 +394,7 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
 /**
  * Delete application (Admin only)
  */
-export const deleteApplication = async (req: AuthRequest, res: Response) => {
+export const deleteApplication = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
 

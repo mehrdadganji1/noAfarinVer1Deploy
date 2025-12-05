@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { X, Camera, Upload, Loader2, Image as ImageIcon, Trash2 } from 'lucide-react';
@@ -88,28 +89,29 @@ export default function ProfilePhotoModal({
     }
   };
 
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={handleClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-          />
+  if (!isOpen) return null;
 
-          {/* Modal Container */}
-          <div className="relative h-full flex items-center justify-center p-4 pointer-events-none">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden pointer-events-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
+  const modalContent = (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-[9999]">
+        {/* Backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={handleClose}
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        />
+
+        {/* Modal Container */}
+        <div className="relative h-full flex items-center justify-center p-4 pointer-events-none">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden pointer-events-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-gray-800 dark:to-gray-900">
                 <div className="flex items-center gap-3">
@@ -273,7 +275,8 @@ export default function ProfilePhotoModal({
             </motion.div>
           </div>
         </div>
-      )}
     </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 }

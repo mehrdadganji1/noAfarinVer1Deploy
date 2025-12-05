@@ -1,10 +1,21 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
+// Export MessageStatus enum
+export enum MessageStatus {
+  SENT = 'sent',
+  DELIVERED = 'delivered',
+  READ = 'read',
+}
+
 export interface IMessage extends mongoose.Document {
   conversationId: mongoose.Types.ObjectId;
   senderId: mongoose.Types.ObjectId;
   receiverId: mongoose.Types.ObjectId;
+  recipientId?: mongoose.Types.ObjectId; // Alias for receiverId
+  senderName?: string;
+  recipientName?: string;
+  status?: MessageStatus;
   content: string;
   messageType: 'text' | 'file' | 'image' | 'system';
   fileUrl?: string;

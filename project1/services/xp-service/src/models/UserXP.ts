@@ -55,7 +55,7 @@ const LevelMilestoneSchema = new Schema<ILevelMilestone>({
 
 const UserXPSchema = new Schema<IUserXP>(
   {
-    userId: { type: String, required: true, unique: true, index: true },
+    userId: { type: String, required: true, unique: true },
     currentXP: { type: Number, default: 0, min: 0 },
     totalXP: { type: Number, default: 0, min: 0 },
     level: { type: Number, default: 1, min: 1 },

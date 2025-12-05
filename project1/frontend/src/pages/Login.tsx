@@ -74,9 +74,35 @@ export default function Login() {
       setAuth(user, token);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Use centralized role utility for consistent navigation
-      const dashboardPath = getDashboardPath(user.role);
-      console.log('→ Navigating to:', dashboardPath);
+      // Smart redirect based on role and status (same logic as password login)
+      let dashboardPath: string;
+
+      if (user.role.includes('applicant')) {
+        // Fetch application status for applicants
+        try {
+          let applicationStatus = 'not_submitted';
+
+          // First check AACO application status
+          try {
+            const aacoResponse = await api.get('/aaco-applications/my-application', {
+              validateStatus: (status) => status === 200 || status === 404,
+            });
+            if (aacoResponse.status === 200 && aacoResponse.data.application) {
+              applicationStatus = aacoResponse.data.application.status;
+            }
+          } catch {
+            // No AACO application found
+          }
+
+          dashboardPath = getDashboardPathWithStatus(user.role, applicationStatus);
+        } catch {
+          dashboardPath = '/pending';
+        }
+      } else {
+        // Non-applicants use standard routing
+        dashboardPath = getDashboardPath(user.role);
+      }
+
       navigate(dashboardPath, { replace: true });
     } catch (err: any) {
       setError(err.response?.data?.error || 'کد وارد شده صحیح نیست');
@@ -105,14 +131,6 @@ export default function Login() {
     localStorage.removeItem('user');
     localStorage.removeItem('auth-storage');
 
-    // Debug: Log credentials being sent
-    console.log('🔐 Login attempt:', {
-      email,
-      passwordLength: password.length,
-      passwordFirstChar: password[0],
-      passwordLastChar: password[password.length - 1]
-    });
-
     try {
       const response = await api.post('/auth/login', { email, password });
       const { user, token } = response.data.data;
@@ -125,69 +143,39 @@ export default function Login() {
         localStorage.removeItem('userEmail');
       }
 
-      console.log('🔐 Login successful, setting auth...');
-      console.log('User:', user);
-      console.log('Token:', token?.substring(0, 20) + '...');
-      
       setAuth(user, token);
       
       // Wait a bit for state to update
       await new Promise(resolve => setTimeout(resolve, 100));
-      
-      console.log('✅ Auth set, determining dashboard...');
 
       // Smart redirect based on role and status
       let dashboardPath: string;
 
       if (user.role.includes('applicant')) {
-        // Fetch application status for applicants
-        // Check both regular application and AACO application
+        // Fetch application status for applicants (AACO application only)
         try {
           let applicationStatus = 'not_submitted';
 
-          // First check AACO application status
+          // Check AACO application status
           try {
             const aacoResponse = await api.get('/aaco-applications/my-application', {
               validateStatus: (status) => status === 200 || status === 404,
             });
             if (aacoResponse.status === 200 && aacoResponse.data.application) {
               applicationStatus = aacoResponse.data.application.status;
-              console.log('📊 AACO Application status:', applicationStatus);
             }
           } catch {
-            console.log('📊 No AACO application found');
-          }
-
-          // If no AACO status, check regular application
-          if (applicationStatus === 'not_submitted') {
-            try {
-              const appResponse = await api.get('/applications/my-application', {
-                validateStatus: (status) => status === 200 || status === 404,
-              });
-              if (appResponse.status === 200 && appResponse.data.data) {
-                applicationStatus = appResponse.data.data.status;
-                console.log('📊 Regular Application status:', applicationStatus);
-              }
-            } catch {
-              console.log('📊 No regular application found');
-            }
+            // No AACO application found
           }
 
           dashboardPath = getDashboardPathWithStatus(user.role, applicationStatus);
-
-          console.log('📊 Final application status:', applicationStatus);
-          console.log('→ Redirecting to:', dashboardPath);
-        } catch (error) {
-          console.error('Failed to fetch application status:', error);
+        } catch {
           // Fallback to pending dashboard for safety
           dashboardPath = '/pending';
-          console.log('⚠️  Fallback to:', dashboardPath);
         }
       } else {
         // Non-applicants use standard routing
         dashboardPath = getDashboardPath(user.role);
-        console.log('User roles:', user.role);
-        console.log('→ Redirecting to:', dashboardPath);
       }
 
       navigate(dashboardPath, { replace: true });

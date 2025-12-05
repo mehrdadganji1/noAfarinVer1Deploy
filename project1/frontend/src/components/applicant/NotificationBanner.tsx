@@ -61,7 +61,7 @@ export default function NotificationBanner({
           icon: XCircle,
           iconColor: 'text-red-600',
           textColor: 'text-red-900',
-          buttonVariant: 'destructive' as const
+          buttonVariant: 'default' as const
         };
       case 'warning':
         return {

@@ -20,32 +20,18 @@ app.use(helmet({
   contentSecurityPolicy: false, // Disable CSP for development
 }));
 
-// CORS configuration - Allow all origins in development
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, curl, or Postman)
-    // and any localhost origins
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'http://localhost:3000',
-      'http://127.0.0.1:5173',
-      'http://127.0.0.1:3000',
-      'http://localhost:8080', // test server
-    ];
-    
-    // Allow file:// origin and null origin for local testing
-    if (!origin || origin === 'null' || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, true); // For development, allow all
-    }
-  },
+// CORS configuration
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.FRONTEND_URL || 'https://yourdomain.com'
+    : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],
   maxAge: 600 // 10 minutes
-}));
+};
+app.use(cors(corsOptions));
 
 app.use(morgan('dev'));
 app.use(express.json());

@@ -6,8 +6,6 @@ import { StatsPremium } from '@/components/landing/premium/StatsPremium';
 import Footer from '@/components/landing/Footer';
 
 const Landing: FC = () => {
-  console.log('🎯 Landing Premium component rendering...');
-  
   return (
     <div className="min-h-screen">
       <HeroFuturistic />

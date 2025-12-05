@@ -8,7 +8,6 @@ export default function NotificationAnalyticsPage() {
 
   const handleExport = () => {
     // TODO: Implement export functionality
-    console.log('Exporting analytics...')
   }
 
   return (

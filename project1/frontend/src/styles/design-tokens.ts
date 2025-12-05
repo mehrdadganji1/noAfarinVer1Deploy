@@ -3,8 +3,6 @@
  * Centralized design system configuration
  */
 
-import { LucideIcon } from 'lucide-react'
-
 // ============================================
 // COLOR SYSTEM
 // ============================================

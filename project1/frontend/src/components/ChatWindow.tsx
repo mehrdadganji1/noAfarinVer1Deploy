@@ -44,7 +44,7 @@ export default function ChatWindow({
   const [isSending, setIsSending] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Auto-scroll to bottom
   useEffect(() => {

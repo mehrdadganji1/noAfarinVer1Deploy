@@ -18,4 +18,19 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-select', '@radix-ui/react-tabs', '@radix-ui/react-tooltip'],
+          'vendor-charts': ['recharts', '@nivo/core', '@nivo/bar', '@nivo/line', '@nivo/pie'],
+          'vendor-utils': ['axios', 'date-fns', 'zustand', 'zod'],
+          'vendor-motion': ['framer-motion'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
+  },
 })

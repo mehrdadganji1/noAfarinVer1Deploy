@@ -81,7 +81,17 @@ export const useProfile = (userId: string | undefined) => {
     queryKey: ['profile', userId],
     queryFn: async () => {
       const { data } = await api.get(`/profile/${userId}`);
-      return data.data;
+      const profileData = data.data;
+      
+      // Transform skills: map 'level' from backend to 'proficiency' for frontend
+      if (profileData?.user?.skills) {
+        profileData.user.skills = profileData.user.skills.map((skill: any) => ({
+          ...skill,
+          proficiency: skill.level || skill.proficiency || 'beginner',
+        }));
+      }
+      
+      return profileData;
     },
     staleTime: 0, // Always consider data stale
     refetchOnWindowFocus: true,

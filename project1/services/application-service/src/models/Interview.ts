@@ -1,6 +1,16 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
+// Export InterviewStatus enum
+export enum InterviewStatus {
+  SCHEDULED = 'scheduled',
+  CONFIRMED = 'confirmed',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled',
+  RESCHEDULED = 'rescheduled',
+  NO_SHOW = 'no-show',
+}
+
 export interface IInterview extends mongoose.Document {
   applicationId: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;

@@ -1,4 +1,5 @@
 import { FC, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, Mail, Phone, FileText, Loader2, MapPin, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -75,9 +76,9 @@ export const EditProfileModal: FC<EditProfileModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50">
+      <div className="fixed inset-0 z-[9999]">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -251,6 +252,8 @@ export const EditProfileModal: FC<EditProfileModalProps> = ({
       </div>
     </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 export default EditProfileModal;

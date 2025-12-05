@@ -15,8 +15,8 @@ export interface IUserProgress extends Document {
 }
 
 const UserProgressSchema: Schema = new Schema({
-  userId: { type: String, required: true, index: true },
-  resourceId: { type: String, required: true, index: true },
+  userId: { type: String, required: true },
+  resourceId: { type: String, required: true },
   status: { 
     type: String, 
     enum: ['not_started', 'in_progress', 'completed'],

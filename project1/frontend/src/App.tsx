@@ -96,16 +96,14 @@ import Events from './pages/admin/Events'
 import EventDetail from './pages/admin/EventDetail'
 import Trainings from './pages/admin/Trainings'
 import TrainingDetail from './pages/admin/TrainingDetail'
+import EditTeam from './pages/admin/EditTeam'
+import EditTraining from './pages/admin/EditTraining'
 import Fundings from './pages/admin/Fundings'
 
 // Initialize error suppressor once
 suppressExpected404Errors();
 
 function App() {
-  console.log('🚀 App initialized - Landing page is the home page!');
-  console.log('Current URL:', window.location.href);
-  console.log('Current pathname:', window.location.pathname);
-
   return (
     <Router
       future={{
@@ -287,6 +285,7 @@ function App() {
         >
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="users" element={<Users />} />
+          <Route path="users/:userId" element={<UserProfile />} />
           <Route path="applications" element={<Applications />} />
           <Route path="aaco-applications" element={<AACOApplications />} />
           <Route path="documents" element={<AdminDocuments />} />
@@ -297,6 +296,7 @@ function App() {
           <Route path="teams" element={<Teams />} />
           <Route path="teams/new" element={<CreateTeam />} />
           <Route path="teams/:id" element={<TeamDetail />} />
+          <Route path="teams/:id/edit" element={<EditTeam />} />
           <Route path="events" element={<Events />} />
           <Route path="events/new" element={<CreateEvent />} />
           <Route path="events/:id" element={<EventDetail />} />
@@ -304,6 +304,7 @@ function App() {
           <Route path="trainings" element={<Trainings />} />
           <Route path="trainings/new" element={<CreateTraining />} />
           <Route path="trainings/:id" element={<TrainingDetail />} />
+          <Route path="trainings/:id/edit" element={<EditTraining />} />
           <Route path="fundings" element={<Fundings />} />
           <Route path="notifications" element={<Notifications />} />
           <Route path="notifications/analytics" element={<NotificationAnalytics />} />
@@ -459,11 +460,14 @@ function App() {
           <Route path="admin/teams" element={<Teams />} />
           <Route path="admin/teams/new" element={<CreateTeam />} />
           <Route path="admin/teams/:id" element={<TeamDetail />} />
+          <Route path="admin/teams/:id/edit" element={<EditTeam />} />
           <Route path="admin/events" element={<AdminEvents />} />
           <Route path="admin/events/:id" element={<EventDetail />} />
+          <Route path="admin/events/:id/edit" element={<EditEvent />} />
           <Route path="admin/trainings" element={<AdminTrainings />} />
           <Route path="admin/trainings/new" element={<CreateTraining />} />
           <Route path="admin/trainings/:id" element={<TrainingDetail />} />
+          <Route path="admin/trainings/:id/edit" element={<EditTraining />} />
           <Route path="admin/fundings" element={<AdminFundings />} />
         </Route>
       </Routes>

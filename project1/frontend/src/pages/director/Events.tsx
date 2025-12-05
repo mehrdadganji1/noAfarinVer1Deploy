@@ -3,8 +3,8 @@ import { useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tansta
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
-  Calendar, Plus, Search, Download, Users, Clock, MapPin, 
-  Edit, Trash2, Eye, MoreVertical, TrendingUp
+  Calendar, Plus, Search, Download, Users, MapPin, 
+  Edit, Trash2, Eye, MoreVertical
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -93,7 +93,6 @@ export default function DirectorEvents() {
   })
 
   const allEvents = data?.pages.flatMap(page => page.events) || []
-  const totalEvents = data?.pages[0]?.pagination.total || 0
 
   // Intersection Observer
   useEffect(() => {

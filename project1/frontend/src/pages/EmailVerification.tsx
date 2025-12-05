@@ -27,7 +27,6 @@ export default function EmailVerification() {
 
     // Only verify once
     if (hasVerified.current) {
-      console.log('⚠️ Skipping duplicate verification (StrictMode)');
       return;
     }
     
@@ -37,35 +36,17 @@ export default function EmailVerification() {
 
   const verifyEmail = async () => {
     try {
-      console.log('🔍 Starting email verification...');
-      console.log('🔍 Token:', token);
-      console.log('🔍 Token length:', token?.length);
-      
       setStatus('loading');
       
       const response = await api.get(`/api/auth/verify-email?token=${token}`);
       
-      console.log('📧 Full Response Object:', response);
-      console.log('📧 Verification response.data:', response.data);
-      console.log('📊 Response status:', response.status);
-      console.log('📊 Response headers:', response.headers);
-      console.log('📊 Full response:', JSON.stringify(response.data, null, 2));
-      
       // Check if response is successful (200-299 status codes)
       if (response.status >= 200 && response.status < 300) {
-        console.log('✅ HTTP Status is OK (200-299)');
-        
         // Check data structure - might be nested
         const data = response.data;
         const isSuccess = data.success === true || data.success === 'true' || response.status === 200;
         
-        console.log('✅ Is Success?', isSuccess);
-        console.log('✅ data.success value:', data.success, typeof data.success);
-        
         if (isSuccess) {
-          console.log('✅ Verification successful!');
-          console.log('✅ Setting status to SUCCESS');
-          
           setStatus('success');
           setMessage(data.message || 'ایمیل شما با موفقیت تایید شد!');
           
@@ -78,34 +59,22 @@ export default function EmailVerification() {
           // Set flag for auto-fill login
           localStorage.setItem('fromVerification', 'true');
           
-          console.log('✅ SUCCESS state set, redirecting in 3 seconds...');
-          
           // Redirect to login after 3 seconds
           setTimeout(() => {
-            console.log('🔄 Redirecting to login...');
             navigate('/login');
           }, 3000);
         } else {
-          console.log('❌ Verification failed - success is false');
-          console.log('❌ Response data:', data);
           setStatus('error');
           setMessage(data.error || 'خطا در تایید ایمیل');
         }
       } else {
-        console.log('❌ HTTP Status is NOT OK:', response.status);
         setStatus('error');
         setMessage(response.data.error || 'خطا در تایید ایمیل');
       }
     } catch (error: any) {
-      console.error('❌ Verification error caught:', error);
-      console.error('❌ Response data:', error.response?.data);
-      console.error('❌ Response status:', error.response?.status);
-      console.error('❌ Error message:', error.response?.data?.error);
-      
       // CRITICAL: Don't overwrite success state!
       // If verification already succeeded, ignore this error (from duplicate call)
       if (hasVerified.current) {
-        console.log('⚠️ Ignoring error - verification already completed successfully');
         return;
       }
       
@@ -113,35 +82,25 @@ export default function EmailVerification() {
       // When user clicks the verification link again after first successful verification
       if (error.response?.status === 400 && 
           error.response?.data?.error?.includes('Invalid or expired')) {
-        console.log('⚠️  Token invalid - checking if user already verified...');
-        
         // Try to check if user already verified
         try {
           const email = localStorage.getItem('pendingVerificationEmail');
-          console.log('📧 Checking email from localStorage:', email);
           
           if (email) {
             const checkResponse = await api.get(`/api/auth/check-verification-status?email=${email}`);
-            console.log('📊 Check response:', checkResponse.data);
             
             if (checkResponse.data.success && checkResponse.data.data.isVerified) {
-              console.log('✅ User IS already verified! Showing success.');
               setStatus('success');
               setMessage('ایمیل شما قبلاً تایید شده است! اکنون می‌توانید وارد شوید.');
               localStorage.removeItem('pendingVerificationEmail');
               setTimeout(() => {
-                console.log('🔄 Redirecting to login...');
                 navigate('/login');
               }, 2000);
               return;
-            } else {
-              console.log('❌ User NOT verified yet. Token truly is invalid.');
             }
-          } else {
-            console.log('⚠️  No email in localStorage');
           }
-        } catch (checkError) {
-          console.error('❌ Failed to check verification status:', checkError);
+        } catch {
+          // Failed to check verification status
         }
       }
       

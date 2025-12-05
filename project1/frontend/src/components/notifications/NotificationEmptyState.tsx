@@ -13,7 +13,8 @@ export default function NotificationEmptyState({ type, onReset }: NotificationEm
       icon: Bell,
       title: 'هیچ اعلانی وجود ندارد',
       description: 'شما هنوز هیچ اعلانی دریافت نکرده‌اید',
-      color: 'text-gray-400'
+      color: 'text-gray-400',
+      showReset: false
     },
     'no-results': {
       icon: Search,
@@ -26,7 +27,8 @@ export default function NotificationEmptyState({ type, onReset }: NotificationEm
       icon: CheckCircle,
       title: 'همه اعلانات خوانده شده!',
       description: 'شما تمام اعلانات خود را بررسی کرده‌اید',
-      color: 'text-green-400'
+      color: 'text-green-400',
+      showReset: false
     }
   }
 

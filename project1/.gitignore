@@ -1,18 +1,16 @@
 # Dependencies
 node_modules/
-package-lock.json
+# package-lock.json - KEEP for deployment
 yarn.lock
 pnpm-lock.yaml
 
-
-
 # Build outputs
-dist/
-build/
+# dist/ - KEEP for deployment if pre-built
+# build/
 *.log
 
 # IDE
-.vscode/
+# .vscode/ - KEEP for team settings
 .idea/
 *.swp
 *.swo
@@ -41,3 +39,28 @@ temp/
 # Uploaded files
 services/file-service/uploads/
 !services/file-service/uploads/.gitkeep
+
+# ===========================================
+# SECURITY - NEVER COMMIT THESE FILES
+# ===========================================
+# Production environment files
+.env.production
+.env.local
+.env.*.local
+
+# Service-specific .env files (contain secrets)
+services/*/.env
+frontend/.env
+# KEEP .env.example files for deployment reference
+!services/*/.env.example
+!frontend/.env.example
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.p12
+
+# Backup files that might contain secrets
+*.bak
+*.backup

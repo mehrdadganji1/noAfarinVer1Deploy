@@ -6,7 +6,7 @@ export interface AuthRequest extends Request {
     userId: string;
     id: string; // Alias for userId
     email: string;
-    role: string;
+    role: string | string[];
   };
 }
 

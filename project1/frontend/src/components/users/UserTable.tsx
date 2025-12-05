@@ -33,18 +33,18 @@ export default function UserTable({
 }: UserTableProps) {
   const getRoleBadgeColor = (role: UserRole) => {
     switch (role) {
-      case 'admin': return 'bg-purple-100 text-purple-700'
-      case 'club_member': return 'bg-green-100 text-green-700'
-      case 'applicant': return 'bg-blue-100 text-blue-700'
+      case UserRole.ADMIN: return 'bg-purple-100 text-purple-700'
+      case UserRole.CLUB_MEMBER: return 'bg-green-100 text-green-700'
+      case UserRole.APPLICANT: return 'bg-blue-100 text-blue-700'
       default: return 'bg-gray-100 text-gray-700'
     }
   }
 
   const getRoleLabel = (role: UserRole) => {
     switch (role) {
-      case 'admin': return 'مدیر'
-      case 'club_member': return 'عضو'
-      case 'applicant': return 'متقاضی'
+      case UserRole.ADMIN: return 'مدیر'
+      case UserRole.CLUB_MEMBER: return 'عضو'
+      case UserRole.APPLICANT: return 'متقاضی'
       default: return role
     }
   }

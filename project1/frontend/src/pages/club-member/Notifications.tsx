@@ -48,7 +48,23 @@ interface Notification {
 const typeConfig: Record<string, { icon: React.ElementType; color: string; label: string }> = {
   achievement: { icon: Trophy, color: 'from-amber-500 to-amber-600', label: 'دستاورد' },
   project: { icon: FolderKanban, color: 'from-blue-500 to-blue-600', label: 'پروژه' },
-  milestone: { icon: Target, color: 'from-gree
+  milestone: { icon: Target, color: 'from-green-500 to-green-600', label: 'نقطه عطف' },
+  team: { icon: Users, color: 'from-purple-500 to-purple-600', label: 'تیم' },
+  event: { icon: Calendar, color: 'from-pink-500 to-pink-600', label: 'رویداد' },
+  course: { icon: BookOpen, color: 'from-cyan-500 to-cyan-600', label: 'دوره' },
+  message: { icon: MessageSquare, color: 'from-indigo-500 to-indigo-600', label: 'پیام' },
+  default: { icon: Bell, color: 'from-gray-500 to-gray-600', label: 'اعلان' },
+}
+
+const priorityConfig: Record<string, { color: string; label: string }> = {
+  urgent: { color: 'bg-red-100 text-red-700 border-red-200', label: 'فوری' },
+  high: { color: 'bg-orange-100 text-orange-700 border-orange-200', label: 'مهم' },
+  normal: { color: 'bg-blue-100 text-blue-700 border-blue-200', label: 'عادی' },
+  low: { color: 'bg-gray-100 text-gray-700 border-gray-200', label: 'کم' },
+}
+
+export default function ClubMemberNotifications() {
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
@@ -292,3 +308,5 @@ const typeConfig: Record<string, { icon: React.ElementType; color: string; label
     </div>
   )
 }
+
+export { ClubMemberNotifications }

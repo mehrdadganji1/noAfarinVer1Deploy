@@ -1,5 +1,8 @@
 import '@testing-library/jest-dom';
 
+// Declare global for TypeScript
+declare const global: typeof globalThis;
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

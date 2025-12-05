@@ -32,9 +32,9 @@ export default function UserDetailsModal({ open, onClose, user, isLoading }: Use
 
   const getRoleLabel = (role: UserRole) => {
     switch (role) {
-      case 'admin': return 'مدیر'
-      case 'club_member': return 'عضو باشگاه'
-      case 'applicant': return 'متقاضی'
+      case UserRole.ADMIN: return 'مدیر'
+      case UserRole.CLUB_MEMBER: return 'عضو باشگاه'
+      case UserRole.APPLICANT: return 'متقاضی'
       default: return role
     }
   }

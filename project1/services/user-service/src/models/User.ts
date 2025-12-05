@@ -213,7 +213,7 @@ const UserSchema = new Schema<IUser>(
       startDate: { type: Date, required: true },
       endDate: { type: Date },
       current: { type: Boolean, default: false },
-      gpa: { type: Number, min: 0, max: 4 },
+      gpa: { type: Number, min: 0, max: 20 },  // Iranian GPA scale (0-20)
       achievements: { type: String, maxlength: 500 },
     }],
     

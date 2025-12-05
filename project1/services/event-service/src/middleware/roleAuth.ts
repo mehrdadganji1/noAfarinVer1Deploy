@@ -8,8 +8,12 @@ export const authorizeRoles = (allowedRoles: string[]) => {
     }
 
     const userRole = req.user.role;
+    
+    // Handle both string and string[] role types
+    const userRoles = Array.isArray(userRole) ? userRole : [userRole];
+    const hasPermission = userRoles.some(role => allowedRoles.includes(role));
 
-    if (!allowedRoles.includes(userRole)) {
+    if (!hasPermission) {
       return res.status(403).json({ 
         message: 'Access denied. Insufficient permissions.',
         requiredRoles: allowedRoles,

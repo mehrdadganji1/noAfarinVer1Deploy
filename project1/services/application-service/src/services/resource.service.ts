@@ -1,4 +1,8 @@
-import Resource, { IResource, ResourceType, ResourceCategory } from '../models/Resource';
+import Resource, { IResource } from '../models/Resource';
+
+// Type definitions based on Resource model
+type ResourceType = 'public' | 'members_only' | 'applicants';
+type ResourceCategory = 'document' | 'video' | 'link' | 'book' | 'course' | 'tool';
 
 export class ResourceService {
   /**

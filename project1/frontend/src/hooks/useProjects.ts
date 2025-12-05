@@ -8,7 +8,6 @@ import {
   ProjectFilters,
   CreateProjectInput,
   UpdateProjectInput,
-  JoinProjectInput,
   UpdateMilestoneInput,
 } from '@/types/project';
 
@@ -194,7 +193,7 @@ export const useUpdateMilestone = () => {
 
   return useMutation({
     mutationFn: async ({
-      projectId,
+      projectId: _projectId,
       milestoneId,
       data,
     }: {

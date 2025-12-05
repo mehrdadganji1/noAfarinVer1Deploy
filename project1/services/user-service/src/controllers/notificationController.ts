@@ -5,6 +5,14 @@ import Notification from '../models/Notification'
 export const getNotifications = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'کاربر احراز هویت نشده است',
+      })
+    }
+    
     const { page = 1, limit = 10, type, isRead, search, priority } = req.query
 
     const query: any = { userId }
@@ -63,6 +71,13 @@ export const getNotifications = async (req: Request, res: Response) => {
 export const getNotificationStats = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'کاربر احراز هویت نشده است',
+      })
+    }
 
     const [total, unread, read, priorityStats, typeStats] = await Promise.all([
       Notification.countDocuments({ userId }),
@@ -113,6 +128,15 @@ export const getNotificationStats = async (req: Request, res: Response) => {
 export const getUnreadCount = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'کاربر احراز هویت نشده است',
+        count: 0,
+      })
+    }
+    
     const count = await Notification.countDocuments({ userId, isRead: false })
 
     res.json({
@@ -133,6 +157,14 @@ export const getUnreadCount = async (req: Request, res: Response) => {
 export const markAsRead = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'کاربر احراز هویت نشده است',
+      })
+    }
+    
     const { id } = req.params
 
     const notification = await Notification.findOneAndUpdate(
@@ -166,6 +198,13 @@ export const markAsRead = async (req: Request, res: Response) => {
 export const markAllAsRead = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'کاربر احراز هویت نشده است',
+      })
+    }
 
     const result = await Notification.updateMany(
       { userId, isRead: false },
@@ -191,6 +230,14 @@ export const markAllAsRead = async (req: Request, res: Response) => {
 export const deleteNotification = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'کاربر احراز هویت نشده است',
+      })
+    }
+    
     const { id } = req.params
 
     const notification = await Notification.findOneAndDelete({ _id: id, userId })
@@ -220,6 +267,13 @@ export const deleteNotification = async (req: Request, res: Response) => {
 export const deleteAllRead = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.userId
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'کاربر احراز هویت نشده است',
+      })
+    }
 
     const result = await Notification.deleteMany({ userId, isRead: true })
 

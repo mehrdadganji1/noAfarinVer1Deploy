@@ -61,41 +61,39 @@ export interface ApplicationStats {
 
 /**
  * Hook to fetch and manage application status
+ * Uses AACO application endpoint as the primary source
  */
 export function useApplicationStatus() {
   return useQuery<ApplicationStats, Error>({
     queryKey: ['application-status'],
     queryFn: async () => {
       try {
-        // Use validateStatus to treat 404 as success (not an error)
-        // This prevents axios from throwing and logging the error
-        const response = await api.get('/applications/my-application', {
-          validateStatus: (status) => status === 200 || status === 404,
-          // Suppress 404 errors in console
-          suppressErrors: true
+        // First try AACO application endpoint (primary)
+        const aacoResponse = await api.get('/aaco-applications/my-application', {
+          validateStatus: (status) => status === 200 || status === 404
         })
         
-        // If 404, user hasn't submitted application yet
-        if (response.status === 404 || !response.data?.data) {
+        // If AACO application exists, use it
+        if (aacoResponse.status === 200 && aacoResponse.data?.application) {
+          const application = aacoResponse.data.application
           return {
-            hasApplication: false,
-            status: 'not_submitted',
-            profileCompletion: 0,
-            documentsSubmitted: 0,
+            hasApplication: true,
+            status: application.status,
+            profileCompletion: calculateProfileCompletion(application),
+            documentsSubmitted: application.documents?.length || 0,
             documentsRequired: 6,
-            application: null
+            application
           }
         }
 
-        const application = response.data.data
-
+        // No application found
         return {
-          hasApplication: true,
-          status: application.status,
-          profileCompletion: calculateProfileCompletion(application),
-          documentsSubmitted: application.documents?.length || 0,
+          hasApplication: false,
+          status: 'not_submitted',
+          profileCompletion: 0,
+          documentsSubmitted: 0,
           documentsRequired: 6,
-          application
+          application: null
         }
       } catch (error) {
         // Silently handle errors - return default state

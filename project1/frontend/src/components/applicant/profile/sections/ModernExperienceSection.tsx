@@ -32,7 +32,6 @@ export function ModernExperienceSection({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
       className="space-y-6"
     >
       <ModernSectionHeader
@@ -55,10 +54,9 @@ export function ModernExperienceSection({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={
-              viewMode === 'grid'
-                ? 'grid grid-cols-1 md:grid-cols-2 gap-4'
-                : 'space-y-4'
+            className={viewMode === 'grid' 
+              ? 'grid grid-cols-1 sm:grid-cols-2 gap-3' 
+              : 'space-y-3'
             }
           >
             {sortedExperience.map((exp, index) => (
@@ -73,22 +71,14 @@ export function ModernExperienceSection({
             ))}
           </motion.div>
         ) : (
-          <motion.div
-            key="empty-state"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <ModernEmptyState
-              icon={Briefcase}
-              title="هنوز سابقه کاری ثبت نشده"
-              description="با افزودن سوابق کاری، پروفایل حرفه‌ای‌تری داشته باشید و شانس پذیرش خود را افزایش دهید."
-              actionLabel="افزودن اولین سابقه"
-              onAction={onAdd}
-              gradient="from-purple-500 to-indigo-500"
-              variant="illustrated"
-            />
-          </motion.div>
+          <ModernEmptyState
+            icon={Briefcase}
+            title="هنوز سابقه کاری ثبت نشده"
+            description="با افزودن سوابق کاری، پروفایل حرفه‌ای‌تری داشته باشید."
+            actionLabel="افزودن اولین سابقه"
+            onAction={onAdd}
+            gradient="from-purple-500 to-indigo-500"
+          />
         )}
       </AnimatePresence>
     </motion.div>

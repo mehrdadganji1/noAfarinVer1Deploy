@@ -1,13 +1,17 @@
+// This file extends Express Request type
 import { Request } from 'express';
 
 declare global {
   namespace Express {
     interface Request {
       user?: {
+        userId: string;
         id: string;
         email: string;
-        role: string;
+        role: string | string[];
       };
     }
   }
 }
+
+export {};

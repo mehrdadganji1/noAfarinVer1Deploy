@@ -1,6 +1,41 @@
 import { motion } from 'framer-motion';
-import { Activity as ActivityIcon } from 'lucide-react';
+import { Activity as ActivityIcon, Trophy, Calendar, BookOpen, FolderKanban, GraduationCap } from 'lucide-react';
 import GlowingCard from './GlowingCard';
+
+// Inline ModernActivityCard component
+const ModernActivityCard = ({ activity, index }: { activity: Activity; index: number }) => {
+  const getIcon = () => {
+    switch (activity.type) {
+      case 'achievement': return Trophy;
+      case 'event': return Calendar;
+      case 'course': return BookOpen;
+      case 'project': return FolderKanban;
+      case 'training': return GraduationCap;
+      default: return ActivityIcon;
+    }
+  };
+  const Icon = getIcon();
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="flex items-start gap-3 p-3 rounded-lg bg-white/50 hover:bg-white/80 transition-colors"
+    >
+      <div className="p-2 rounded-lg bg-purple-100">
+        <Icon className="w-4 h-4 text-purple-600" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="font-medium text-gray-900 text-sm truncate">{activity.title}</p>
+        <p className="text-xs text-gray-500 truncate">{activity.description}</p>
+      </div>
+      {activity.points && (
+        <span className="text-xs font-bold text-purple-600">+{activity.points} XP</span>
+      )}
+    </motion.div>
+  );
+};
 
 interface Activity {
   id: string;

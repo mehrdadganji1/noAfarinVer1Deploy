@@ -19,11 +19,21 @@ const app: Application = express();
 const httpServer = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
+// CORS Configuration
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.FRONTEND_URL || 'https://yourdomain.com'
+    : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+};
+
 // Middleware
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(compression());
-app.use(morgan('combined'));
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
 // File Service proxy MUST come BEFORE body parsers
 // to handle multipart/form-data correctly
@@ -1507,144 +1517,12 @@ app.all('/api/challenges*', async (req: Request, res: Response) => {
   }
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    error: 'Route not found',
-  });
-});
-
-// Error handler
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error('Error:', err);
-  res.status(500).json({
-    success: false,
-    error: 'Internal server error',
-  });
-});
-
-// XP Service - Proxy to XP Service
-app.all('/api/xp*', async (req: Request, res: Response) => {
-  const targetPath = req.path; // Keep /api/xp as-is
-  const targetUrl = `${process.env.XP_SERVICE_URL || 'http://localhost:3002'}${targetPath}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
-
-  console.log(`[XP] → ${req.method} ${targetPath}`);
-  console.log(`[XP] Target URL: ${targetUrl}`);
-
-  try {
-    const cleanHeaders: any = {};
-    Object.keys(req.headers).forEach(key => {
-      if (!['host', 'connection', 'content-length', 'transfer-encoding'].includes(key.toLowerCase())) {
-        cleanHeaders[key] = req.headers[key];
-      }
-    });
-    cleanHeaders['host'] = new URL(process.env.XP_SERVICE_URL || 'http://localhost:3002').host;
-
-    const response = await axios({
-      method: req.method,
-      url: targetUrl,
-      data: req.body,
-      headers: cleanHeaders,
-      timeout: 15000,
-      validateStatus: () => true,
-    });
-
-    console.log(`[XP] ← ${response.status}`);
-    res.status(response.status).json(response.data);
-  } catch (error: any) {
-    console.error('[XP Proxy Error]:', error.message);
-    if (error.response) {
-      res.status(error.response.status).json(error.response.data);
-    } else {
-      res.status(503).json({ success: false, error: 'XP Service unavailable' });
-    }
-  }
-});
-
-// Streaks - Proxy to XP Service
-app.all('/api/streaks*', async (req: Request, res: Response) => {
-  const targetPath = req.path; // Keep /api/streaks as-is
-  const targetUrl = `${process.env.XP_SERVICE_URL || 'http://localhost:3002'}${targetPath}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
-
-  console.log(`[Streaks] → ${req.method} ${targetPath}`);
-  console.log(`[Streaks] Target URL: ${targetUrl}`);
-
-  try {
-    const cleanHeaders: any = {};
-    Object.keys(req.headers).forEach(key => {
-      if (!['host', 'connection', 'content-length', 'transfer-encoding'].includes(key.toLowerCase())) {
-        cleanHeaders[key] = req.headers[key];
-      }
-    });
-    cleanHeaders['host'] = new URL(process.env.XP_SERVICE_URL || 'http://localhost:3002').host;
-
-    const response = await axios({
-      method: req.method,
-      url: targetUrl,
-      data: req.body,
-      headers: cleanHeaders,
-      timeout: 15000,
-      validateStatus: () => true,
-    });
-
-    console.log(`[Streaks] ← ${response.status}`);
-    res.status(response.status).json(response.data);
-  } catch (error: any) {
-    console.error('[Streaks Proxy Error]:', error.message);
-    if (error.response) {
-      res.status(error.response.status).json(error.response.data);
-    } else {
-      res.status(503).json({ success: false, error: 'Streaks Service unavailable' });
-    }
-  }
-});
-
-// Challenges - Proxy to XP Service
-app.all('/api/challenges*', async (req: Request, res: Response) => {
-  const targetPath = req.path; // Keep /api/challenges as-is
-  const targetUrl = `${process.env.XP_SERVICE_URL || 'http://localhost:3002'}${targetPath}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
-
-  console.log(`[Challenges] → ${req.method} ${targetPath}`);
-  console.log(`[Challenges] Target URL: ${targetUrl}`);
-
-  try {
-    const cleanHeaders: any = {};
-    Object.keys(req.headers).forEach(key => {
-      if (!['host', 'connection', 'content-length', 'transfer-encoding'].includes(key.toLowerCase())) {
-        cleanHeaders[key] = req.headers[key];
-      }
-    });
-    cleanHeaders['host'] = new URL(process.env.XP_SERVICE_URL || 'http://localhost:3002').host;
-
-    const response = await axios({
-      method: req.method,
-      url: targetUrl,
-      data: req.body,
-      headers: cleanHeaders,
-      timeout: 15000,
-      validateStatus: () => true,
-    });
-
-    console.log(`[Challenges] ← ${response.status}`);
-    res.status(response.status).json(response.data);
-  } catch (error: any) {
-    console.error('[Challenges Proxy Error]:', error.message);
-    if (error.response) {
-      res.status(error.response.status).json(error.response.data);
-    } else {
-      res.status(503).json({ success: false, error: 'Challenges Service unavailable' });
-    }
-  }
-});
-
 // Stats - Proxy to User Service
 app.all('/api/stats*', async (req: Request, res: Response) => {
-  const targetPath = req.path; // Keep /api/stats
+  const targetPath = req.path;
   const targetUrl = `${process.env.USER_SERVICE_URL}${targetPath}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
 
   console.log(`[Stats] → ${req.method} ${targetPath}`);
-  console.log(`[Stats] Target URL: ${targetUrl}`);
 
   try {
     const cleanHeaders: any = {};
@@ -1676,13 +1554,12 @@ app.all('/api/stats*', async (req: Request, res: Response) => {
   }
 });
 
-// Director - Proxy to User Service (Director endpoints)
+// Director - Proxy to User Service
 app.all('/api/director*', async (req: Request, res: Response) => {
-  const targetPath = req.path; // Keep /api/director as-is
+  const targetPath = req.path;
   const targetUrl = `${process.env.USER_SERVICE_URL}${targetPath}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
 
   console.log(`[Director] → ${req.method} ${targetPath}`);
-  console.log(`[Director] Target URL: ${targetUrl}`);
 
   try {
     const cleanHeaders: any = {};
@@ -1716,24 +1593,20 @@ app.all('/api/director*', async (req: Request, res: Response) => {
 
 // Uploads - Proxy to User Service (for avatar images)
 app.all('/uploads/*', async (req: Request, res: Response) => {
-  const targetPath = req.path; // Keep /uploads path
+  const targetPath = req.path;
   const targetUrl = `${process.env.USER_SERVICE_URL}${targetPath}`;
 
   console.log(`[Uploads] → ${req.method} ${targetPath}`);
-  console.log(`[Uploads] Target URL: ${targetUrl}`);
 
   try {
     const response = await axios({
       method: req.method,
       url: targetUrl,
-      responseType: 'arraybuffer', // For binary data (images)
+      responseType: 'arraybuffer',
       timeout: 15000,
       validateStatus: () => true,
     });
 
-    console.log(`[Uploads] ← ${response.status}`);
-    
-    // Set content type from response
     if (response.headers['content-type']) {
       res.setHeader('Content-Type', response.headers['content-type']);
     }
@@ -1745,6 +1618,59 @@ app.all('/uploads/*', async (req: Request, res: Response) => {
   }
 });
 
+// Learning Resources - Proxy to Learning Service
+app.all('/api/learning*', async (req: Request, res: Response) => {
+  const targetPath = req.path.replace('/api/learning', '/api/resources');
+  const targetUrl = `${process.env.LEARNING_SERVICE_URL || 'http://localhost:3013'}${targetPath}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
+
+  console.log(`[Learning] → ${req.method} ${targetPath}`);
+
+  try {
+    const cleanHeaders: any = {};
+    Object.keys(req.headers).forEach(key => {
+      if (!['host', 'connection', 'content-length', 'transfer-encoding'].includes(key.toLowerCase())) {
+        cleanHeaders[key] = req.headers[key];
+      }
+    });
+    cleanHeaders['host'] = new URL(process.env.LEARNING_SERVICE_URL || 'http://localhost:3013').host;
+
+    const response = await axios({
+      method: req.method,
+      url: targetUrl,
+      data: req.body,
+      headers: cleanHeaders,
+      timeout: 15000,
+      validateStatus: () => true,
+    });
+
+    console.log(`[Learning] ← ${response.status}`);
+    res.status(response.status).json(response.data);
+  } catch (error: any) {
+    console.error('[Learning Proxy Error]:', error.message);
+    if (error.response) {
+      res.status(error.response.status).json(error.response.data);
+    } else {
+      res.status(503).json({ success: false, error: 'Learning Service unavailable' });
+    }
+  }
+});
+
+// 404 handler - MUST be after all routes
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'Route not found',
+  });
+});
+
+// Error handler - MUST be last
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Error:', err);
+  res.status(500).json({
+    success: false,
+    error: 'Internal server error',
+  });
+});
 
 // Setup Socket.IO
 const socketHelpers = setupSocketIO(httpServer);

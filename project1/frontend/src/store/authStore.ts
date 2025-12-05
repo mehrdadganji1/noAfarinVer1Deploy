@@ -40,26 +40,14 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       isAuthenticated: false,
       setAuth: (user, token) => {
-        console.log('🔐 authStore.setAuth called:', {
-          userId: user._id,
-          email: user.email,
-          roles: user.role,
-          tokenLength: token.length
-        })
-        
         // Store in zustand state (will be persisted by middleware)
         set({ user, token, isAuthenticated: true })
         
         // Also store token directly in localStorage for immediate access
         localStorage.setItem('token', token)
         localStorage.setItem('user', JSON.stringify(user))
-        
-        console.log('✅ authStore.setAuth completed')
-        console.log('   Token stored in localStorage:', !!localStorage.getItem('token'))
-        console.log('   User stored in localStorage:', !!localStorage.getItem('user'))
       },
       setUser: (user) => {
-        console.log('👤 authStore.setUser called:', user._id)
         set({ user })
         localStorage.setItem('user', JSON.stringify(user))
       },
@@ -68,7 +56,8 @@ export const useAuthStore = create<AuthState>()(
           const token = localStorage.getItem('token')
           if (!token) return
           
-          const response = await fetch('/api/auth/me', {
+          const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+          const response = await fetch(`${API_URL}/api/auth/me`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
@@ -80,7 +69,6 @@ export const useAuthStore = create<AuthState>()(
             if (data.success && data.data) {
               set({ user: data.data })
               localStorage.setItem('user', JSON.stringify(data.data))
-              console.log('🔄 User refreshed successfully')
             }
           }
         } catch (error) {
@@ -88,15 +76,12 @@ export const useAuthStore = create<AuthState>()(
         }
       },
       logout: () => {
-        console.log('🚪 authStore.logout called')
         set({ user: null, token: null, isAuthenticated: false })
         
         // Also clear from localStorage
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         localStorage.removeItem('auth-storage')
-        
-        console.log('✅ Logout completed, all storage cleared')
       },
     }),
     {

@@ -76,7 +76,48 @@ export const useAACOForm = () => {
   };
 
   const handleSubmit = async () => {
+    // 🔍 Pre-submission validation
+    console.log('📤 Submitting AACO Application:', {
+      degree: formData.degree,
+      teamSize: formData.teamSize,
+      fullData: formData
+    });
+    
+    // Import validation function dynamically
+    const { validateFormData } = await import('../utils/validation');
+    const validation = validateFormData(formData);
+    
+    if (!validation.isValid) {
+      console.error('❌ Validation failed:', validation.errors);
+      
+      // Show first error
+      const firstError = Object.values(validation.errors)[0];
+      toast.error(`خطای اعتبارسنجی: ${firstError}`, {
+        duration: 5000,
+      });
+      
+      // Find which step has the error
+      const errorFields = Object.keys(validation.errors);
+      const step1Fields = ['firstName', 'lastName', 'email', 'phone', 'city'];
+      const step2Fields = ['university', 'major', 'degree', 'graduationYear'];
+      const step3Fields = ['startupIdea', 'businessModel', 'targetMarket', 'teamSize', 'teamMembers', 'skills'];
+      const step4Fields = ['motivation', 'goals', 'experience', 'expectations'];
+      
+      if (errorFields.some(f => step1Fields.includes(f))) {
+        setCurrentStep(1);
+      } else if (errorFields.some(f => step2Fields.includes(f))) {
+        setCurrentStep(2);
+      } else if (errorFields.some(f => step3Fields.includes(f))) {
+        setCurrentStep(3);
+      } else if (errorFields.some(f => step4Fields.includes(f))) {
+        setCurrentStep(4);
+      }
+      
+      return;
+    }
+    
     setIsSubmitting(true);
+    
     try {
       let response;
       
@@ -104,9 +145,23 @@ export const useAACOForm = () => {
         throw new Error(response.data.error || 'Failed to submit application');
       }
     } catch (error: any) {
-      console.error('Submit error:', error);
-      const errorMessage = error.response?.data?.error || error.message || 'خطا در ثبت درخواست';
-      toast.error(errorMessage);
+      console.error('❌ Submit error:', error);
+      console.error('❌ Error response:', error.response?.data);
+      
+      // Handle validation errors
+      if (error.response?.data?.validationErrors) {
+        const validationErrors = error.response.data.validationErrors;
+        const errorMessages = Object.entries(validationErrors)
+          .map(([field, message]) => `${field}: ${message}`)
+          .join('\n');
+        
+        toast.error(`خطای اعتبارسنجی:\n${errorMessages}`, {
+          duration: 6000,
+        });
+      } else {
+        const errorMessage = error.response?.data?.error || error.message || 'خطا در ثبت درخواست';
+        toast.error(errorMessage);
+      }
     } finally {
       setIsSubmitting(false);
     }

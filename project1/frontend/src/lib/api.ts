@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { toast } from '@/components/ui/toast'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
 // Log API URL on startup
 console.log('🔧 API Configuration:', {
@@ -236,8 +236,19 @@ api.interceptors.response.use(
         toast.error('خطای سرور. لطفاً بعداً تلاش کنید.')
       }
     } else if (error.response?.status === 503) {
-      // Service Unavailable
-      toast.error('سرویس موقتاً در دسترس نیست.')
+      // Service Unavailable - Don't show toast for optional services
+      const url = error.config?.url || ''
+      const is503Expected = url.includes('/projects') ||
+                            url.includes('/teams') ||
+                            url.includes('/events') ||
+                            url.includes('/trainings') ||
+                            url.includes('/fundings') ||
+                            url.includes('/achievements') ||
+                            url.includes('/xp/')
+      
+      if (!is503Expected) {
+        toast.error('سرویس موقتاً در دسترس نیست.')
+      }
     } else if (error.code === 'ECONNABORTED') {
       // Timeout
       toast.error('زمان درخواست تمام شد. لطفاً دوباره تلاش کنید.')

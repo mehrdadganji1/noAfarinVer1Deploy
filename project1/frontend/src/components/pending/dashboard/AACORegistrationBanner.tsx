@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { Rocket, X, Sparkles, ArrowLeft, CheckCircle, Users, Lightbulb } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import api from '@/lib/api';
 
 interface AACORegistrationBannerProps {
   delay?: number;
@@ -36,7 +37,6 @@ export const AACORegistrationBanner: FC<AACORegistrationBannerProps> = ({ delay 
         }
 
         // Use axios with proper baseURL
-        const { default: api } = await import('@/lib/api');
         const response = await api.get('/aaco-applications/check-status');
         
         // Show banner only if user hasn't submitted application

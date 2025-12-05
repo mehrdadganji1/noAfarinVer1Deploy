@@ -350,7 +350,7 @@ export default function EventDetail() {
                   </>
                 ) : (
                   <Button
-                    variant="secondary"
+                    variant="outline"
                     size="lg"
                     className="flex-1"
                     disabled

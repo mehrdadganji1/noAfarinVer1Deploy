@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -97,9 +98,9 @@ export default function EducationFormModal({
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50">
+      <div className="fixed inset-0 z-[9999]">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -115,7 +116,7 @@ export default function EducationFormModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", duration: 0.5 }}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden pointer-events-auto"
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-visible pointer-events-auto"
             dir="rtl"
             onClick={(e) => e.stopPropagation()}
           >
@@ -295,4 +296,6 @@ export default function EducationFormModal({
       </div>
     </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 }

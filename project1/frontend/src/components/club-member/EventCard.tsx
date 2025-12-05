@@ -238,7 +238,7 @@ export default function EventCard({ event, onRegister, onUnregister, onViewDetai
             </>
           ) : (
             <Button
-              variant="secondary"
+              variant="outline"
               className="flex-1 h-10"
               disabled
             >

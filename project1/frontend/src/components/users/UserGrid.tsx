@@ -35,33 +35,33 @@ export default function UserGrid({
 }: UserGridProps) {
   const getRoleBadgeColor = (role: UserRole) => {
     switch (role) {
-      case 'director': return 'bg-purple-100 text-purple-700 border-purple-200'
-      case 'admin': return 'bg-blue-100 text-blue-700 border-blue-200'
-      case 'manager': return 'bg-cyan-100 text-cyan-700 border-cyan-200'
-      case 'club_member': return 'bg-green-100 text-green-700 border-green-200'
-      case 'applicant': return 'bg-orange-100 text-orange-700 border-orange-200'
+      case UserRole.DIRECTOR: return 'bg-purple-100 text-purple-700 border-purple-200'
+      case UserRole.ADMIN: return 'bg-blue-100 text-blue-700 border-blue-200'
+      case UserRole.MANAGER: return 'bg-cyan-100 text-cyan-700 border-cyan-200'
+      case UserRole.CLUB_MEMBER: return 'bg-green-100 text-green-700 border-green-200'
+      case UserRole.APPLICANT: return 'bg-orange-100 text-orange-700 border-orange-200'
       default: return 'bg-gray-100 text-gray-700 border-gray-200'
     }
   }
 
   const getRoleLabel = (role: UserRole) => {
     switch (role) {
-      case 'director': return 'مدیرکل'
-      case 'admin': return 'مدیر سیستم'
-      case 'manager': return 'مدیر'
-      case 'club_member': return 'عضو باشگاه'
-      case 'applicant': return 'متقاضی'
+      case UserRole.DIRECTOR: return 'مدیرکل'
+      case UserRole.ADMIN: return 'مدیر سیستم'
+      case UserRole.MANAGER: return 'مدیر'
+      case UserRole.CLUB_MEMBER: return 'عضو باشگاه'
+      case UserRole.APPLICANT: return 'متقاضی'
       default: return role
     }
   }
 
   const getRoleIcon = (role: UserRole) => {
     switch (role) {
-      case 'director': return Crown
-      case 'admin': return Shield
-      case 'manager': return Briefcase
-      case 'club_member': return Users
-      case 'applicant': return FileText
+      case UserRole.DIRECTOR: return Crown
+      case UserRole.ADMIN: return Shield
+      case UserRole.MANAGER: return Briefcase
+      case UserRole.CLUB_MEMBER: return Users
+      case UserRole.APPLICANT: return FileText
       default: return Users
     }
   }

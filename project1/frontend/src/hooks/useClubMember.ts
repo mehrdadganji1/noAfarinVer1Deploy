@@ -1,13 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  ClubMember,
   MemberListParams,
   MemberListResponse,
   MemberStatsResponse,
-  PromotionRequest,
   PromotionResponse,
-  UpdateLevelRequest,
-  UpdateStatusRequest,
   PromotionHistoryResponse,
 } from '@/types/clubMember';
 import { toast } from '@/lib/toast';
