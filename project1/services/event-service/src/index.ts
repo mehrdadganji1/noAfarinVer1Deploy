@@ -19,9 +19,33 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('combined'));
 
-mongoose.connect(process.env.MONGODB_URI!)
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch((err) => console.error('❌ MongoDB error:', err));
+// Database connection with retry logic
+const connectDB = async (retries = 5, delay = 5000): Promise<void> => {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      console.log(`🔄 MongoDB connection attempt ${attempt}/${retries}...`);
+      await mongoose.connect(process.env.MONGODB_URI!, {
+        serverSelectionTimeoutMS: 10000,
+        connectTimeoutMS: 10000,
+      });
+      console.log('✅ MongoDB connected');
+      return;
+    } catch (error) {
+      console.error(`❌ MongoDB connection attempt ${attempt} failed:`, error instanceof Error ? error.message : error);
+      
+      if (attempt === retries) {
+        console.error('❌ All MongoDB connection attempts failed. Exiting...');
+        process.exit(1);
+      }
+      
+      console.log(`⏳ Waiting ${delay/1000}s before next attempt...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+};
+
+// Connect to MongoDB
+connectDB();
 
 app.get('/health', (req, res) => {
   res.json({ success: true, message: 'Event Service is running' });

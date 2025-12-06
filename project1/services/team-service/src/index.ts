@@ -28,30 +28,54 @@ app.use('/api/teams', teamRoutes);
 let isServerRunning = false;
 let server: any;
 
-mongoose.connect(process.env.MONGODB_URI!)
-  .then(() => {
-    console.log('✅ MongoDB connected');
-    server = app.listen(PORT, () => {
-      if (isServerRunning) {
-        console.log('⚠️  Server already running, skipping...');
-        return;
-      }
-      isServerRunning = true;
-      console.log(`🚀 Team Service running on port ${PORT}`);
-    }).on('error', (err: NodeJS.ErrnoException) => {
-      if (err.code === 'EADDRINUSE') {
-        console.error(`❌ Port ${PORT} is already in use!`);
+// Database connection with retry logic
+const connectDB = async (retries = 5, delay = 5000): Promise<void> => {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      console.log(`🔄 MongoDB connection attempt ${attempt}/${retries}...`);
+      await mongoose.connect(process.env.MONGODB_URI!, {
+        serverSelectionTimeoutMS: 10000,
+        connectTimeoutMS: 10000,
+      });
+      console.log('✅ MongoDB connected');
+      return;
+    } catch (error) {
+      console.error(`❌ MongoDB connection attempt ${attempt} failed:`, error instanceof Error ? error.message : error);
+      
+      if (attempt === retries) {
+        console.error('❌ All MongoDB connection attempts failed. Exiting...');
         process.exit(1);
-      } else {
-        console.error('❌ Server error:', err);
-        process.exit(1);
       }
-    });
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB error:', err);
-    process.exit(1);
+      
+      console.log(`⏳ Waiting ${delay/1000}s before next attempt...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+};
+
+// Start server after DB connection
+const startServer = async () => {
+  await connectDB();
+  
+  server = app.listen(PORT, () => {
+    if (isServerRunning) {
+      console.log('⚠️  Server already running, skipping...');
+      return;
+    }
+    isServerRunning = true;
+    console.log(`🚀 Team Service running on port ${PORT}`);
+  }).on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`❌ Port ${PORT} is already in use!`);
+      process.exit(1);
+    } else {
+      console.error('❌ Server error:', err);
+      process.exit(1);
+    }
   });
+};
+
+startServer();
 
 // Graceful shutdown
 const gracefulShutdown = async (signal: string) => {

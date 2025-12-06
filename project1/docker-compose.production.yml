@@ -8,7 +8,7 @@ services:
   mongodb:
     image: mongo:7
     container_name: noafarin-mongodb
-    restart: always
+    restart: unless-stopped
     ports:
       - "27017:27017"
     environment:
@@ -19,24 +19,36 @@ services:
       - mongodb_data:/data/db
     networks:
       - noafarin-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   # Redis
   redis:
     image: redis:7-alpine
     container_name: noafarin-redis
-    restart: always
+    restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     networks:
       - noafarin-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   # RabbitMQ
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: noafarin-rabbitmq
-    restart: always
+    restart: unless-stopped
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -47,6 +59,12 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - noafarin-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   # API Gateway
   api-gateway:
@@ -54,7 +72,7 @@ services:
       context: ./services/api-gateway
       dockerfile: Dockerfile
     container_name: noafarin-gateway
-    restart: always
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
@@ -76,8 +94,10 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       FRONTEND_URL: ${FRONTEND_URL}
     depends_on:
-      - redis
-      - rabbitmq
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -87,7 +107,7 @@ services:
       context: ./services/user-service
       dockerfile: Dockerfile
     container_name: noafarin-user-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3001:3001"
     environment:
@@ -108,9 +128,12 @@ services:
       SMS_IR_API_KEY: ${SMS_IR_API_KEY}
       FRONTEND_URL: ${FRONTEND_URL}
     depends_on:
-      - mongodb
-      - redis
-      - rabbitmq
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -120,7 +143,7 @@ services:
       context: ./services/team-service
       dockerfile: Dockerfile
     container_name: noafarin-team-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3002:3002"
     environment:
@@ -131,9 +154,12 @@ services:
       RABBITMQ_URL: ${RABBITMQ_URL}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
-      - redis
-      - rabbitmq
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -143,7 +169,7 @@ services:
       context: ./services/event-service
       dockerfile: Dockerfile
     container_name: noafarin-event-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3003:3003"
     environment:
@@ -154,9 +180,12 @@ services:
       RABBITMQ_URL: ${RABBITMQ_URL}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
-      - redis
-      - rabbitmq
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -166,7 +195,7 @@ services:
       context: ./services/evaluation-service
       dockerfile: Dockerfile
     container_name: noafarin-evaluation-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3004:3004"
     environment:
@@ -177,9 +206,12 @@ services:
       RABBITMQ_URL: ${RABBITMQ_URL}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
-      - redis
-      - rabbitmq
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -189,7 +221,7 @@ services:
       context: ./services/training-service
       dockerfile: Dockerfile
     container_name: noafarin-training-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3005:3005"
     environment:
@@ -200,9 +232,12 @@ services:
       RABBITMQ_URL: ${RABBITMQ_URL}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
-      - redis
-      - rabbitmq
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -212,7 +247,7 @@ services:
       context: ./services/funding-service
       dockerfile: Dockerfile
     container_name: noafarin-funding-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3006:3006"
     environment:
@@ -223,9 +258,12 @@ services:
       RABBITMQ_URL: ${RABBITMQ_URL}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
-      - redis
-      - rabbitmq
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -235,7 +273,7 @@ services:
       context: ./services/file-service
       dockerfile: Dockerfile
     container_name: noafarin-file-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3007:3007"
     environment:
@@ -247,7 +285,8 @@ services:
     volumes:
       - file_uploads:/app/uploads
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -257,7 +296,7 @@ services:
       context: ./services/application-service
       dockerfile: Dockerfile
     container_name: noafarin-application-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3008:3008"
     environment:
@@ -266,7 +305,8 @@ services:
       MONGODB_URI: ${MONGODB_URI}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -276,7 +316,7 @@ services:
       context: ./services/learning-service
       dockerfile: Dockerfile
     container_name: noafarin-learning-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3013:3013"
     environment:
@@ -285,7 +325,8 @@ services:
       MONGODB_URI: ${MONGODB_URI}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -295,7 +336,7 @@ services:
       context: ./services/xp-service
       dockerfile: Dockerfile
     container_name: noafarin-xp-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3011:3011"
     environment:
@@ -304,7 +345,8 @@ services:
       MONGODB_URI: ${MONGODB_URI}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -314,7 +356,7 @@ services:
       context: ./services/achievement-service
       dockerfile: Dockerfile
     container_name: noafarin-achievement-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3012:3012"
     environment:
@@ -323,7 +365,8 @@ services:
       MONGODB_URI: ${MONGODB_URI}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -333,7 +376,7 @@ services:
       context: ./services/project-service
       dockerfile: Dockerfile
     container_name: noafarin-project-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "3010:3010"
     environment:
@@ -342,7 +385,8 @@ services:
       MONGODB_URI: ${MONGODB_URI}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - noafarin-network
 
@@ -355,7 +399,7 @@ services:
         VITE_API_URL: ${VITE_API_URL}
         VITE_FILE_SERVICE_URL: ${VITE_API_URL}
     container_name: noafarin-frontend
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
