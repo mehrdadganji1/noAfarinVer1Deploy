@@ -1,8 +1,15 @@
 import axios from 'axios';
 
-const SMS_IR_API_KEY = process.env.SMS_IR_API_KEY || 'mCRnbLcYV1QLnYejy13WymVBlcX4dbiViHMO7PklFZM08KXhUBD4BWYy7fmH0rUA';
+const SMS_IR_API_KEY = process.env.SMS_IR_API_KEY || 'dvWUadeydqwhVZmYZc8ICwmFBZJ4XJpJe5WHWR8LiXxGR601';
 const SMS_IR_BASE_URL = 'https://api.sms.ir';
-const SMS_IR_LINE_NUMBER = process.env.SMS_IR_LINE_NUMBER || ''; // شماره خط شما
+const SMS_IR_LINE_NUMBER = process.env.SMS_IR_LINE_NUMBER || '30007732000000';
+const SMS_IR_TEMPLATE_ID = process.env.SMS_IR_TEMPLATE_ID || '100000';
+
+// Log SMS configuration on startup
+console.log('📱 SMS Service Configuration:');
+console.log(`   API Key: ${SMS_IR_API_KEY ? '✅ Set (' + SMS_IR_API_KEY.substring(0, 10) + '...)' : '❌ Missing'}`);
+console.log(`   Line Number: ${SMS_IR_LINE_NUMBER || '❌ Missing'}`);
+console.log(`   Template ID: ${SMS_IR_TEMPLATE_ID || '❌ Missing'}`);
 
 interface SmsResponse {
   status: number;
@@ -95,11 +102,19 @@ class SmsService {
    * ارسال کد تایید (با استفاده از الگو یا پیام ساده)
    */
   async sendOTP(phoneNumber: string, code: string): Promise<boolean> {
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('📱 SMS OTP Request');
+    console.log(`   Phone: ${phoneNumber}`);
+    console.log(`   Code: ${code}`);
+    console.log(`   API Key: ${this.apiKey ? '✅' : '❌'}`);
+    console.log(`   Template ID: ${SMS_IR_TEMPLATE_ID}`);
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    
     try {
       // روش 1: استفاده از Template API (بهترین روش - بدون نیاز به lineNumber)
-      const templateId = parseInt(process.env.SMS_IR_TEMPLATE_ID || '0');
+      const templateId = parseInt(SMS_IR_TEMPLATE_ID);
       if (templateId > 0) {
-        console.log('📱 Sending SMS via Template API...');
+        console.log(`📱 Sending SMS via Template API (ID: ${templateId})...`);
         await this.sendVerificationCode(phoneNumber, templateId, [
           { name: 'CODE', value: code }
         ]);

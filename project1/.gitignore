@@ -41,26 +41,14 @@ services/file-service/uploads/
 !services/file-service/uploads/.gitkeep
 
 # ===========================================
-# SECURITY - NEVER COMMIT THESE FILES
+# SECURITY
 # ===========================================
-# Production environment files
-.env.production
-.env.local
-.env.*.local
-
-# Service-specific .env files (contain secrets)
-services/*/.env
-frontend/.env
-# KEEP .env.example files for deployment reference
-!services/*/.env.example
-!frontend/.env.example
-
 # SSL certificates
 *.pem
 *.key
 *.crt
 *.p12
 
-# Backup files that might contain secrets
+# Backup files
 *.bak
 *.backup
